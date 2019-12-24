@@ -4,12 +4,16 @@
 
 package config
 
-import "flag"
+import (
+	"flag"
+	"time"
+)
 
 type flags struct {
 	port    stringFlag
 	mock    boolFlag
 	timeout intFlag
+	at      timeFlag
 }
 
 func newFlags() *flags {
@@ -18,8 +22,11 @@ func newFlags() *flags {
 	flag.Var(&f.port, "port", "Port that the server is hosted on")
 	flag.Var(&f.mock, "mock", "Whether to mock the backing data storage for testing")
 	flag.Var(&f.timeout, "timeout", "Set the default HTTP timeout")
+	flag.Var(&f.at, "at", "")
 
 	// nested struct fields
+
+	f.at.format = time.RFC3339
 
 	return &f
 }
@@ -48,9 +55,11 @@ func (f *flags) defaults() {
 	}
 }
 
-func (f *flags) toConfig() *Config {
-	return &Config{
+func (f *flags) toConfig() Config {
+	return Config{
 		port:    f.port.value,
+		mock:    f.mock.value,
 		timeout: f.timeout.value,
+		at:      f.at.value,
 	}
 }

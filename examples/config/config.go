@@ -6,17 +6,19 @@ package config
 
 import (
 	"flag"
+	"time"
 )
 
 type Config struct {
 	port    string
 	mock    bool
 	timeout int
+	at      time.Time
 }
 
 var (
 	// Internal singleton config to avoid re-parse if called multiple times
-	c *Config
+	c Config
 )
 
 func (c *Config) Port() string {
@@ -27,6 +29,9 @@ func (c *Config) Mock() bool {
 }
 func (c *Config) Timeout() int {
 	return c.timeout
+}
+func (c *Config) At() time.Time {
+	return c.at
 }
 
 func Parse(v Validator) (*Config, error) {
@@ -39,10 +44,11 @@ func Parse(v Validator) (*Config, error) {
 		f.defaults()
 
 		c = f.toConfig()
-		return c, c.validate(v)
+
+		return &c, c.validate(v)
 	}
 
-	return c, nil
+	return &c, nil
 }
 
 func (c *Config) validate(v Validator) error {

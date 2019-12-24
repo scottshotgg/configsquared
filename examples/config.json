@@ -14,5 +14,11 @@
 		"description": "Set the default HTTP timeout",
 		"default": 15,
 		"validate": true
+	},
+	"at": {
+		"type": "time",
+		"extra": {
+			"format": "rfc3339"
+		}
 	}
 }

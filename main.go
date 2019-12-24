@@ -16,6 +16,7 @@ type baseValue struct {
 	Description string
 	Required    bool
 	Validate    bool
+	Extra       map[string]string
 	// Example interface{}
 	// Format string?
 	// Qualifiers? regex, lt, gt, etc
@@ -66,6 +67,7 @@ func main() {
 
 	for k := range config {
 		var v = config[k]
+
 		// fmt.Println("k, v", k, v)
 
 		if v.Type == nil {
@@ -95,7 +97,7 @@ func main() {
 	// If there is a validator function, that means something requested validation.
 	// In this case:
 	//	- generate the validator.go file that contains the interface
-	// This is to allow configs without validation to not concern themselves with the entire interface
+	// This is to allow configs without validation to not concern themselves with the interface entirely
 	if len(stmts.validators) > 0 {
 		err = stmts.createValidatorFile()
 		if err != nil {
@@ -166,10 +168,10 @@ func (s *statements) createConfigFile() error {
 
 	var cf = string(configTemplate)
 
-	cf = strings.Replace(cf, "// %configFields%",
+	cf = strings.Replace(cf, "// configFields",
 		strings.Join(s.configFields, "\n"), 1)
 
-	cf = strings.Replace(cf, "// %configGetters%",
+	cf = strings.Replace(cf, "// configGetters",
 		strings.Join(s.configGetters, "\n"), 1)
 
 	if len(s.validateCalls) > 0 {
@@ -193,20 +195,23 @@ func (s *statements) createFlagsFile() error {
 
 	var cf = string(flagTemplate)
 
-	cf = strings.Replace(cf, "// %flagFields%",
+	cf = strings.Replace(cf, "// flagFields",
 		strings.Join(s.flagFields, "\n"), 1)
 
-	cf = strings.Replace(cf, "// %flagVars%",
+	cf = strings.Replace(cf, "// flagVars",
 		strings.Join(s.flagVars, "\n"), 1)
 
-	cf = strings.Replace(cf, "// %requiredIfs%",
+	cf = strings.Replace(cf, "// requiredIfs",
 		strings.Join(s.requiredIfs, "\n"), 1)
 
-	cf = strings.Replace(cf, "// %defaultIfs%",
+	cf = strings.Replace(cf, "// defaultIfs",
 		strings.Join(s.defaultIfs, "\n"), 1)
 
-	cf = strings.Replace(cf, "// %mappers%",
+	cf = strings.Replace(cf, "// mappers",
 		strings.Join(s.mappers, "\n"), 1)
+
+	cf = strings.Replace(cf, "// extraFields",
+		strings.Join(s.extraFields, "\n"), 1)
 
 	return ioutil.WriteFile(pwd+"config/flags.go", []byte(cf), 0666)
 }
@@ -217,7 +222,7 @@ func (s *statements) createValidatorFile() error {
 		panic(err)
 	}
 
-	var cf = strings.Replace(string(validateTemplate), "// %validators%",
+	var cf = strings.Replace(string(validateTemplate), "// validators",
 		strings.Join(s.validators, "\n"), 1)
 
 	return ioutil.WriteFile(pwd+"config/validator.go", []byte(cf), 0666)
@@ -239,6 +244,8 @@ type statements struct {
 
 	validators    []string
 	validateCalls []string
+
+	extraFields []string
 }
 
 func (s *statements) parseBase(k string, v *baseValue) {
@@ -270,15 +277,25 @@ func (s *statements) parseBase(k string, v *baseValue) {
 	// Check if we need to make a default assertion
 	if v.Default != nil {
 		s.defaultIfs = append(s.defaultIfs, makeDefaultIf(configName, configType, v.Default))
-
-		// TODO: this is one that needs to change if we are in a struct
-		// Create the mapper from flags to config
-		s.mappers = append(s.mappers, makeMapper(configName))
 	}
+
+	// TODO: this is one that needs to change if we are in a struct
+	// Create the mapper from flags to config
+	s.mappers = append(s.mappers, makeMapper(configName))
 
 	if v.Validate {
 		s.validators = append(s.validators, makeValidator(k, configName, configType))
 		s.validateCalls = append(s.validateCalls, makeValidateCall(k, configName))
+	}
+
+	// If we have extra fields, we need to use them
+	if configType == "time" {
+		// Get the extra fields
+		// somehow check the fields?
+		// going to have to change "rfc3339" -> "time.RFC3339"
+		for field, fieldValue := range v.Extra {
+			s.extraFields = append(s.extraFields, makeExtraField(configName, field, fieldValue))
+		}
 	}
 }
 

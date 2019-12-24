@@ -14,10 +14,18 @@ func makeFuncName(k string) string {
 }
 
 func makeConfigField(configName, configType string) string {
+	if configType == "time" {
+		configType += ".Time"
+	}
+
 	return fmt.Sprintf(configField, configName, configType)
 }
 
 func makeConfigGetter(k, configName, configType string) string {
+	if configType == "time" {
+		configType += ".Time"
+	}
+
 	return fmt.Sprintf(configGetter, makeFuncName(k), configType, configName)
 }
 
@@ -47,4 +55,8 @@ func makeValidator(k, configName, configType string) string {
 
 func makeValidateCall(k, configName string) string {
 	return fmt.Sprintf(validateCall, makeFuncName(k), configName)
+}
+
+func makeExtraField(configName, fieldName, fieldValue string) string {
+	return fmt.Sprintf(extraField, configName, fieldName, fieldValue)
 }

@@ -9,7 +9,7 @@ import (
 )
 
 type Config struct {
-	// %configFields%
+	// configFields
 }
 
 var (
@@ -17,7 +17,7 @@ var (
 	c Config
 )
 
-// %configGetters%
+// configGetters
 
 func Parse() *Config {
 	if !flag.Parsed() {

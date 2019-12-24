@@ -5,7 +5,6 @@
 package config
 
 import (
-	"errors"
 	"time"
 )
 
@@ -17,21 +16,24 @@ type durationFlag struct {
 
 // If flag is not provided it will not get to this function
 func (d *durationFlag) Set(x string) error {
-	// TODO: implement this
-	return errors.New("type not implemented; duration")
+	// In this case 'x' should be something like "2m" or "5h", etc
 
-	// // Set the string value
-	// d.sValue = x
+	// Parse the value from the provided string
+	var value, err = time.ParseDuration(x)
+	if err != nil {
+		return err
+	}
 
-	// // Parse the value from the provided string
+	// Set the string value
+	d.sValue = x
 
-	// // Set the actual value
-	// // t.value = int(value)
+	// Set the actual value
+	d.value = value
 
-	// // Mark the flag as set
-	// d.set = true
+	// Mark the flag as set
+	d.set = true
 
-	// return nil
+	return nil
 }
 
 func (d *durationFlag) String() string {

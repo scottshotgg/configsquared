@@ -4,6 +4,4 @@
 
 package config
 
-type Validator interface {
-	// validators
-}
+// TODO: idk if this will be implemented

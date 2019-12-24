@@ -44,6 +44,8 @@ var (
 	parseValidate = `c = f.toConfig()
 	
 	return &c, c.validate(v)`
+
+	extraField = `f.%s.%s = "%s"`
 )
 
 // TODO: not sure if I want to do this for now
