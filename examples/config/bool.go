@@ -4,7 +4,9 @@
 
 package config
 
-import "strconv"
+import (
+	"strconv"
+)
 
 // TODO: Might just be able to do bools with a flag and have them
 

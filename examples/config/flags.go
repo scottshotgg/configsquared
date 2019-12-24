@@ -48,8 +48,8 @@ func (f *flags) defaults() {
 	}
 }
 
-func (f *flags) toConfig() Config {
-	return Config{
+func (f *flags) toConfig() *Config {
+	return &Config{
 		port:    f.port.value,
 		timeout: f.timeout.value,
 	}

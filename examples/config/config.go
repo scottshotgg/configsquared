@@ -16,7 +16,7 @@ type Config struct {
 
 var (
 	// Internal singleton config to avoid re-parse if called multiple times
-	c Config
+	c *Config
 )
 
 func (c *Config) Port() string {
@@ -39,10 +39,10 @@ func Parse(v Validator) (*Config, error) {
 		f.defaults()
 
 		c = f.toConfig()
-		return &c, c.validate(v)
+		return c, c.validate(v)
 	}
 
-	return &c, nil
+	return c, nil
 }
 
 func (c *Config) validate(v Validator) error {

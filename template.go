@@ -42,6 +42,7 @@ var (
 }`
 
 	parseValidate = `c = f.toConfig()
+	
 	return &c, c.validate(v)`
 )
 

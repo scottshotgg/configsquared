@@ -8,35 +8,33 @@ import (
 	"strconv"
 )
 
-// TODO: Might just be able to do bools with a flag and have them
-
-type boolFlag struct {
+type int32Flag struct {
 	set    bool
-	value  bool
+	value  int
 	sValue string
 }
 
 // If flag is not provided it will not get to this function
-func (sf *boolFlag) Set(x string) error {
+func (i *int32Flag) Set(x string) error {
 	// Set the string value
-	sf.sValue = x
+	i.sValue = x
 
 	// Parse the value from the provided string
-	var value, err = strconv.ParseBool(sf.sValue)
+	var value, err = strconv.ParseInt(i.sValue, 10, 32)
 	if err != nil {
 		// TODO: test this out
 		return err
 	}
 
 	// Set the actual value
-	sf.value = value
+	i.value = int(value)
 
 	// Mark the flag as set
-	sf.set = true
+	i.set = true
 
 	return nil
 }
 
-func (sf *boolFlag) String() string {
-	return sf.sValue
+func (i *int32Flag) String() string {
+	return i.sValue
 }

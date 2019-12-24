@@ -12,7 +12,9 @@ type stringFlag struct {
 // If flag is not provided it will not get to this function
 func (sf *stringFlag) Set(x string) error {
 	sf.value = x
+
 	sf.set = true
+
 	return nil
 }
 

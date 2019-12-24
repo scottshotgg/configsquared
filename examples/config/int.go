@@ -15,26 +15,26 @@ type intFlag struct {
 }
 
 // If flag is not provided it will not get to this function
-func (sf *intFlag) Set(x string) error {
+func (i *intFlag) Set(x string) error {
 	// Set the string value
-	sf.sValue = x
+	i.sValue = x
 
 	// Parse the value from the provided string
-	var value, err = strconv.ParseInt(sf.sValue, 10, 32)
+	var value, err = strconv.ParseInt(i.sValue, 10, 0)
 	if err != nil {
 		// TODO: test this out
 		return err
 	}
 
 	// Set the actual value
-	sf.value = int(value)
+	i.value = int(value)
 
 	// Mark the flag as set
-	sf.set = true
+	i.set = true
 
 	return nil
 }
 
-func (sf *intFlag) String() string {
-	return sf.sValue
+func (i *intFlag) String() string {
+	return i.sValue
 }

@@ -2,41 +2,41 @@
 
 // It is in your best interest NOT to edit this file as it will be removed if re-generated.
 
+// TODO: templatize 32 and 64 bit
+
 package config
 
 import (
 	"strconv"
 )
 
-// TODO: Might just be able to do bools with a flag and have them
-
-type boolFlag struct {
+type float64Flag struct {
 	set    bool
-	value  bool
+	value  float64
 	sValue string
 }
 
 // If flag is not provided it will not get to this function
-func (sf *boolFlag) Set(x string) error {
+func (f *float64Flag) Set(x string) error {
 	// Set the string value
-	sf.sValue = x
+	f.sValue = x
 
 	// Parse the value from the provided string
-	var value, err = strconv.ParseBool(sf.sValue)
+	var value, err = strconv.ParseFloat(f.sValue, 64)
 	if err != nil {
 		// TODO: test this out
 		return err
 	}
 
 	// Set the actual value
-	sf.value = value
+	f.value = value
 
 	// Mark the flag as set
-	sf.set = true
+	f.set = true
 
 	return nil
 }
 
-func (sf *boolFlag) String() string {
-	return sf.sValue
+func (f *float64Flag) String() string {
+	return f.sValue
 }
