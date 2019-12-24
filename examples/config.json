@@ -1,0 +1,18 @@
+{
+	"port": {
+		"type": "string",
+		"description": "Port that the server is hosted on",
+		"default": "8080",
+		"required": true
+	},
+	"mock": {
+		"type": "bool",
+		"description": "Whether to mock the backing data storage for testing"
+	},
+	"timeout": {
+		"type": "int",
+		"description": "Set the default HTTP timeout",
+		"default": 15,
+		"validate": true
+	}
+}

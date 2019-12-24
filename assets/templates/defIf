@@ -1,0 +1,7 @@
+if !f.%s.set {
+	var err = f.%s.Set("%s")
+	if err != nil {
+		// _probably_ just for now
+		panic(err)
+	}
+}

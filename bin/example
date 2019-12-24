@@ -1,0 +1,11 @@
+# Build config squared
+bin/build
+
+# Run all the commands from here as if this were a real project
+cd examples
+
+# Run config squared
+../cc
+
+# build the example binary
+bin/build
