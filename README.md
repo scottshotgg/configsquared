@@ -1,6 +1,6 @@
 # configsquared
 
-ConfigSquared: A configurable code generator to easily produce type-safe config libraries
+ConfigSquared: A configurable code generator to easily produce type-safe config packages for your application
 
 `bin/example` will regenerate the `examples/config` directory; it can also be used as a starting scratchpad to play around.
 
