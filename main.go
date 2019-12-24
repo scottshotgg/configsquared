@@ -16,6 +16,9 @@ type baseValue struct {
 	Description string
 	Required    bool
 	Validate    bool
+	// Example interface{}
+	// Format string?
+	// Qualifiers? regex, lt, gt, etc
 
 	Default interface{}
 }
