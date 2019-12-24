@@ -39,3 +39,12 @@ _\*Take special note here, you do have to supply a `Validator` if you have requi
 ### Validation
 
 Examining `validator.go`, we can see how to implement the validation for our flags - by supplying a `Validator` (seen in `validator.go`) which will ensure that values marked for validation are checked as we have specified. See `examples/main.go` for a simple demo implementation.
+
+<br>
+<br>
+
+Try out the different scripts in the `examples/bin` folder to get a feel for what you might get at run-time.
+
+- `bin/valid` - simple script to display how values are passed
+- `bin/invalid` - discovering an invalid flag via a validation function
+- `bin/required` - displaying what happens if a required flag is not passed
