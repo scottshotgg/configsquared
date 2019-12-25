@@ -14,9 +14,33 @@
 12. Handle nested struct variables
 13. Bootstrap arguments using this lib
 14. Figure out how to make bools not NEED an argument
-15. Implement `time`, `duration`, `byte`, `array`, `slice`, `complex64/128` and `url` flag types
+15. Implement outstanding types:
+
+- `unix/nano time`
+- `duration`
+- `date`
+- `byte`
+- `array`
+- `slice`
+- `complex64/128`
+- `any`
+- `location` (coordinates, idk)
+- ~~`time`~~
+- ~~`float32/64`~~
+- ~~`int32/64`~~
+- ~~`uint32/64`~~
+- ~~`ip`~~
+- ~~`ipv4`~~
+- ~~`ipv6`~~
+- ~~`url`~~
+
 16. Could we allow the user to implement their own types?
-17. Allow VERY rudimentary type specifications; lt, gt, eq, ne, max, min, etc
-18. Think about maybe adding an interface type
-19. Look for more types to do
-20. Handle TODOs
+17. Allow VERY rudimentary type specifications:
+
+- lt
+- gt
+- eq
+- ne
+- max
+- min
+- etc

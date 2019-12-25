@@ -154,8 +154,8 @@ func (s *statements) copyLibFiles() error {
 
 	// For not just copy the example files
 	for k := range s.libTypes {
-		// fmt.Println("copying \"" + root + "assets/lib/" + k + ".go\" to " + pwd + "config/")
-		err = exec.Command("cp", root+"assets/lib/"+k+".go", pwd+"config/").Run()
+		// fmt.Println("copying \"" + root + "assets/types/" + k + ".go\" to " + pwd + "config/")
+		err = exec.Command("cp", root+"assets/types/"+k+".go", pwd+"config/").Run()
 		if err != nil {
 			return err
 		}
