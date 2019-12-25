@@ -2,6 +2,7 @@ package main
 
 import (
 	"encoding/json"
+	"errors"
 	"fmt"
 	"io/ioutil"
 	"os"
@@ -9,6 +10,7 @@ import (
 	"path/filepath"
 	"strconv"
 	"strings"
+	"time"
 )
 
 type baseValue struct {
@@ -16,7 +18,9 @@ type baseValue struct {
 	Description string
 	Required    bool
 	Validate    bool
-	Extra       map[string]string
+	Layout      string
+	Format      string
+	// Extra       map[string]string
 	// Example interface{}
 	// Format string?
 	// Qualifiers? regex, lt, gt, etc
@@ -288,15 +292,83 @@ func (s *statements) parseBase(k string, v *baseValue) {
 		s.validateCalls = append(s.validateCalls, makeValidateCall(k, configName))
 	}
 
+	// If there are defined extra fields then we will add them
+	if len(allowedExtraFields[configType]) > 0 {
+		s.extraFields = append(s.extraFields, resolveExtraFields(configType, configName, v)...)
+	}
+}
+
+var allowedExtraFields = map[string][]string{
+	"time": []string{
+		"format",
+		"layout",
+	},
+}
+
+var timeFormats = map[string]string{
+	"ansic":       "Mon Jan _2 15:04:05 2006",
+	"unixdate":    "Mon Jan _2 15:04:05 MST 2006",
+	"rubydate":    "Mon Jan 02 15:04:05 -0700 2006",
+	"rfc822":      "02 Jan 06 15:04 MST",
+	"rc822z":      "02 Jan 06 15:04 -0700",
+	"rfc850":      "Monday, 02-Jan-06 15:04:05 MST",
+	"rfc1123":     "Mon, 02 Jan 2006 15:04:05 MST",
+	"rfc1123Z":    "Mon, 02 Jan 2006 15:04:05 -0700",
+	"rfc3339":     "2006-01-02T15:04:05Z07:00",
+	"rfc3339nano": "2006-01-02T15:04:05.999999999Z07:00",
+	"kitchen":     "3:04PM",
+	// Handy time stamps.
+	"stamp":      "Jan _2 15:04:05",
+	"stampmilli": "Jan _2 15:04:05.000",
+	"stampmicro": "Jan _2 15:04:05.000000",
+	"stampnano":  "Jan _2 15:04:05.000000000",
+}
+
+func resolveExtraFields(configType, configName string, v *baseValue) []string {
+	var fields []string
+
 	// If we have extra fields, we need to use them
 	if configType == "time" {
 		// Get the extra fields
 		// somehow check the fields?
 		// going to have to change "rfc3339" -> "time.RFC3339"
-		for field, fieldValue := range v.Extra {
-			s.extraFields = append(s.extraFields, makeExtraField(configName, field, fieldValue))
+
+		// We don't have a layout
+		if v.Layout == "" {
+			if v.Format == "" {
+				// If both are empty, we will default to time.RFC3339
+				fields = append(fields, makeExtraField(configName, "layout", time.RFC3339))
+			} else {
+				// Ensure that the time format is valid (one of Go's predefined time formats)
+				var f, ok = timeFormats[strings.ToLower(v.Format)]
+				if !ok {
+					panic(fmt.Errorf("invalid time format: %s", v.Format))
+				}
+
+				fields = append(fields, makeExtraField(configName, "layout", f))
+			}
+			// We have a layout
+		} else {
+			if v.Format != "" {
+				// Invalid - You cannot have a "layout" and a "format", it must be one of the other because a "format" ultimately produces a "layout"
+				panic(errors.New("cannot specify both a format and a layout; a format produces a layout"))
+			}
+
+			// First make sure they have not accidentally-ed the format into the layout
+			// Ensure that the time format is valid (one of Go's predefined time formats)
+			var _, ok = timeFormats[strings.ToLower(v.Layout)]
+			if ok {
+				panic(fmt.Errorf("please use the \"format\" attribute for a specific format: %s", v.Layout))
+			}
+
+			// Use their layout unconditionally
+			fmt.Println("Using provided layout:", v.Layout)
+
+			fields = append(fields, makeExtraField(configName, "layout", v.Layout))
 		}
 	}
+
+	return fields
 }
 
 // makeDefaultString takes an interface makes and either:

@@ -16,9 +16,9 @@
 		"validate": true
 	},
 	"at": {
-		"type": "time",
-		"extra": {
-			"format": "rfc3339"
-		}
+		"type": "time"
+	},
+	"remote": {
+		"type": "url"
 	}
 }

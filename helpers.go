@@ -13,17 +13,25 @@ func makeFuncName(k string) string {
 	return strings.ToUpper(string(k[0])) + k[1:]
 }
 
+var realType = map[string]string{
+	"time":     "time.Time",
+	"duration": "time.Duration",
+	"url":      "url.URL",
+}
+
 func makeConfigField(configName, configType string) string {
-	if configType == "time" {
-		configType += ".Time"
+	var rt = realType[configType]
+	if len(rt) > 0 {
+		configType = rt
 	}
 
 	return fmt.Sprintf(configField, configName, configType)
 }
 
 func makeConfigGetter(k, configName, configType string) string {
-	if configType == "time" {
-		configType += ".Time"
+	var rt = realType[configType]
+	if len(rt) > 0 {
+		configType = rt
 	}
 
 	return fmt.Sprintf(configGetter, makeFuncName(k), configType, configName)

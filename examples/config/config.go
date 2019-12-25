@@ -6,6 +6,7 @@ package config
 
 import (
 	"flag"
+	"net/url"
 	"time"
 )
 
@@ -14,6 +15,7 @@ type Config struct {
 	mock    bool
 	timeout int
 	at      time.Time
+	remote  url.URL
 }
 
 var (
@@ -32,6 +34,9 @@ func (c *Config) Timeout() int {
 }
 func (c *Config) At() time.Time {
 	return c.at
+}
+func (c *Config) Remote() url.URL {
+	return c.remote
 }
 
 func Parse(v Validator) (*Config, error) {

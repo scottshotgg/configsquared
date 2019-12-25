@@ -5,38 +5,37 @@
 package config
 
 import (
-	"time"
+	"errors"
+	"net"
 )
 
-// TODO: will need a format specifier
-// this will have to be templated for a format
-type timeFlag struct {
+type ipFlag struct {
 	set    bool
-	value  time.Time
-	layout string
+	value  net.IP
 	sValue string
 }
 
 // If flag is not provided it will not get to this function
-func (t *timeFlag) Set(x string) error {
+func (i *ipFlag) Set(x string) error {
 	// Set the string value
-	t.sValue = x
+	i.sValue = x
 
 	// Parse the value from the provided string
-	var value, err = time.Parse(t.layout, x)
-	if err != nil {
-		return err
+	var value = net.ParseIP(i.sValue)
+	if value == nil {
+		// TODO: test this out
+		return errors.New("invalid ip: " + x)
 	}
 
 	// Set the actual value
-	t.value = value
+	i.value = value
 
 	// Mark the flag as set
-	t.set = true
+	i.set = true
 
 	return nil
 }
 
-func (t *timeFlag) String() string {
-	return t.sValue
+func (i *ipFlag) String() string {
+	return i.sValue
 }

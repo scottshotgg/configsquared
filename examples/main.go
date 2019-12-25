@@ -35,4 +35,6 @@ func main() {
 	fmt.Println("HTTP timeout is", c.Timeout(), "seconds")
 
 	fmt.Println(c.At())
+
+	fmt.Printf("%+v\n", c.Remote())
 }

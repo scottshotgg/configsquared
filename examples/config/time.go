@@ -13,7 +13,7 @@ import (
 type timeFlag struct {
 	set    bool
 	value  time.Time
-	format string
+	layout string
 	sValue string
 }
 
@@ -23,7 +23,7 @@ func (t *timeFlag) Set(x string) error {
 	t.sValue = x
 
 	// Parse the value from the provided string
-	var value, err = time.Parse(time.RFC3339Nano, x)
+	var value, err = time.Parse(t.layout, x)
 	if err != nil {
 		return err
 	}
