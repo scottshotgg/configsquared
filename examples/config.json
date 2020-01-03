@@ -48,11 +48,5 @@
 	},
 	"rune": {
 		"type": "rune"
-	},
-	"letters": {
-		"type": "array",
-		"items": {
-			"type": "int"
-		}
 	}
 }

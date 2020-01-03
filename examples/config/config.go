@@ -11,20 +11,20 @@ import (
 )
 
 type Config struct {
-	remote  url.URL
-	idc     string
-	uint32  uint32
-	port    string
-	retries int
 	at      time.Time
-	int32   int32
-	rune    rune
-	timeout time.Duration
-	mock    bool
-	when    time.Time
-	int64   int64
+	remote  url.URL
 	uint64  uint64
+	rune    rune
+	retries int
+	when    time.Time
+	idc     string
+	int64   int64
 	byte    byte
+	port    string
+	timeout time.Duration
+	int32   int32
+	uint32  uint32
+	mock    bool
 }
 
 var (
@@ -32,47 +32,47 @@ var (
 	c Config
 )
 
-func (c *Config) Remote() url.URL {
-	return c.remote
-}
-func (c *Config) Idc() string {
-	return c.idc
-}
-func (c *Config) Uint32() uint32 {
-	return c.uint32
-}
-func (c *Config) Port() string {
-	return c.port
-}
-func (c *Config) Retries() int {
-	return c.retries
-}
 func (c *Config) At() time.Time {
 	return c.at
 }
-func (c *Config) Int32() int32 {
-	return c.int32
-}
-func (c *Config) Rune() rune {
-	return c.rune
-}
-func (c *Config) Timeout() time.Duration {
-	return c.timeout
-}
-func (c *Config) Mock() bool {
-	return c.mock
-}
-func (c *Config) When() time.Time {
-	return c.when
-}
-func (c *Config) Int64() int64 {
-	return c.int64
+func (c *Config) Remote() url.URL {
+	return c.remote
 }
 func (c *Config) Uint64() uint64 {
 	return c.uint64
 }
+func (c *Config) Rune() rune {
+	return c.rune
+}
+func (c *Config) Retries() int {
+	return c.retries
+}
+func (c *Config) When() time.Time {
+	return c.when
+}
+func (c *Config) Idc() string {
+	return c.idc
+}
+func (c *Config) Int64() int64 {
+	return c.int64
+}
 func (c *Config) Byte() byte {
 	return c.byte
+}
+func (c *Config) Port() string {
+	return c.port
+}
+func (c *Config) Timeout() time.Duration {
+	return c.timeout
+}
+func (c *Config) Int32() int32 {
+	return c.int32
+}
+func (c *Config) Uint32() uint32 {
+	return c.uint32
+}
+func (c *Config) Mock() bool {
+	return c.mock
 }
 
 func Parse(v Validator) (*Config, error) {
