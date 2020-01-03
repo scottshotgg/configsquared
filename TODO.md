@@ -16,14 +16,14 @@
 14. Figure out how to make bools not NEED an argument
 15. Implement outstanding types:
 
-- `unix/nano time`
-- `duration`
-- `date`
-- `byte`
 - `array`
 - `slice`
-- `complex64/128`
-- `any`
+- `object`
+- ~~`date`~~ - use `time` to do this
+- ~~`byte`~~
+- ~~`unix time`~~
+- ~~`duration`~~
+- ~~`any`~~
 - ~~`time`~~
 - ~~`float32/64`~~
 - ~~`int32/64`~~
@@ -34,6 +34,7 @@
 - ~~`url`~~
 
 16. Could we allow the user to implement their own types?
+    - make it very pluggable
 17. Allow VERY rudimentary type specifications:
 
 - lt
@@ -44,4 +45,5 @@
 - min
 - etc
 
-18. Add `example` as a valid key
+18. ~~Add `example` as a valid key~~
+19. How to make our own help text

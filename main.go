@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
+	"github.com/prometheus/common/log"
 	"io/ioutil"
 	"os"
 	"os/exec"
@@ -11,7 +12,6 @@ import (
 	"strconv"
 	"strings"
 	"time"
-	"github.com/prometheus/common/log"
 )
 
 type baseValue struct {
@@ -21,6 +21,8 @@ type baseValue struct {
 	Validate    bool
 	Layout      string
 	Format      string
+	Items       *baseValue
+	Example     string
 	// Extra       map[string]string
 	// Example interface{}
 	// Format string?
@@ -106,7 +108,7 @@ func main() {
 	if len(stmts.validators) > 0 {
 		err = stmts.createValidatorFile()
 		if err != nil {
-		log.Fatalln("err", err)
+			log.Fatalln("err", err)
 		}
 	}
 
@@ -253,6 +255,10 @@ type statements struct {
 	extraFields []string
 }
 
+func (s *statements) parseArray(k string, v *baseValue) {
+
+}
+
 func (s *statements) parseBase(k string, v *baseValue) {
 	// It doesn't make sense to require the value but then also provide a default... whats the point?
 	if v.Default != nil && v.Required {
@@ -265,6 +271,13 @@ func (s *statements) parseBase(k string, v *baseValue) {
 	)
 
 	// Might need to be something here for the "real type"
+
+	// We have an array
+	if v.Items != nil {
+		// TODO: implement array parsing
+		panic(fmt.Errorf("arrays are not implemented: %s", k))
+		// s.parseArray(k, v)
+	}
 
 	if v.Format == "unix" {
 		configType = "unix"

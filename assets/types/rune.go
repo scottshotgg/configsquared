@@ -8,29 +8,29 @@ import (
 	"errors"
 )
 
-type byteFlag struct {
+type runeFlag struct {
 	set    bool
-	value  byte
+	value  rune
 	sValue string
 }
 
 // TODO: flesh this out more
 
 // If flag is not provided it will not get to this function
-func (b *byteFlag) Set(x string) error {
-	var bs = []byte(x)
+func (r *runeFlag) Set(x string) error {
+	var rs = []rune(x)
 
-	if len(bs) > 1 {
-		return errors.New("byte flag only accepts one byte")
+	if len(rs) > 1 {
+		return errors.New("rune flag only accepts one rune")
 	}
 
-	b.value = bs[0]
+	r.value = rs[0]
 
-	b.set = true
+	r.set = true
 
 	return nil
 }
 
-func (b *byteFlag) String() string {
-	return b.sValue
+func (r *runeFlag) String() string {
+	return r.sValue
 }

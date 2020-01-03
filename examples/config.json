@@ -42,5 +42,17 @@
 	},
 	"uint64": {
 		"type": "uint64"
+	},
+	"byte": {
+		"type": "byte"
+	},
+	"rune": {
+		"type": "rune"
+	},
+	"letters": {
+		"type": "array",
+		"items": {
+			"type": "integer"
+		}
 	}
 }

@@ -6,6 +6,7 @@ package config
 
 import (
 	"errors"
+	"fmt"
 )
 
 type byteFlag struct {
@@ -18,6 +19,7 @@ type byteFlag struct {
 
 // If flag is not provided it will not get to this function
 func (b *byteFlag) Set(x string) error {
+	fmt.Println("I was called", x)
 	var bs = []byte(x)
 
 	if len(bs) > 1 {

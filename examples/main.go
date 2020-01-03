@@ -43,4 +43,8 @@ func main() {
 	fmt.Printf("Remote: %+v\n", c.Remote())
 
 	fmt.Println("Idc about this value:", c.Idc())
+
+	fmt.Printf("Rune: %d %s\n", c.Rune(), string(c.Rune()))
+
+	fmt.Printf("Byte: %d %s\n", c.Byte(), string(c.Byte()))
 }
