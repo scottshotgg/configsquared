@@ -5,5 +5,5 @@
 package config
 
 type Validator interface {
-	ValidateTimeout(timeout int) error
+	ValidateRetries(retries int) error
 }

@@ -19,8 +19,6 @@ To start off, let's look at the contained `config.json` file (`examples/config.j
 Every `config.json` file contains a single object in which the keys identify the flags you intend to utilize in your application with their respective value representing intrinsic attributes about their value, such as the variable `type`, whether or not is is `required` for the user to provide this, if it has a `default` value, and a `description` that will appear in the help menu. In addition, the user can also specify whether or not they would like to require the library to `validate` the config values at run-time. <br>
 The _only_ required value to have is `type`; everything else is optional.
 
-\*_Currently, the only types implemented are `bool`, `int`, and `string`._
-
 <br>
 
 ### Generation

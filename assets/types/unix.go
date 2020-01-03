@@ -6,35 +6,36 @@ package config
 
 import (
 	"strconv"
+	"time"
 )
 
-type int32Flag struct {
+type unixFlag struct {
 	set    bool
-	value  int32
+	value  time.Time
 	sValue string
 }
 
 // If flag is not provided it will not get to this function
-func (i *int32Flag) Set(x string) error {
+func (u *unixFlag) Set(x string) error {
 	// Set the string value
-	i.sValue = x
+	u.sValue = x
 
 	// Parse the value from the provided string
-	var value, err = strconv.ParseInt(i.sValue, 10, 32)
+	var value, err = strconv.ParseInt(u.sValue, 10, 64)
 	if err != nil {
 		// TODO: test this out
 		return err
 	}
 
 	// Set the actual value
-	i.value = int32(value)
+	u.value = time.Unix(value, 0)
 
 	// Mark the flag as set
-	i.set = true
+	u.set = true
 
 	return nil
 }
 
-func (i *int32Flag) String() string {
-	return i.sValue
+func (u *unixFlag) String() string {
+	return u.sValue
 }

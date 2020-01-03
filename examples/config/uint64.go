@@ -8,33 +8,33 @@ import (
 	"strconv"
 )
 
-type int32Flag struct {
+type uint64Flag struct {
 	set    bool
-	value  int32
+	value  uint64
 	sValue string
 }
 
 // If flag is not provided it will not get to this function
-func (i *int32Flag) Set(x string) error {
+func (u *uint64Flag) Set(x string) error {
 	// Set the string value
-	i.sValue = x
+	u.sValue = x
 
 	// Parse the value from the provided string
-	var value, err = strconv.ParseInt(i.sValue, 10, 32)
+	var value, err = strconv.ParseUint(u.sValue, 10, 64)
 	if err != nil {
 		// TODO: test this out
 		return err
 	}
 
 	// Set the actual value
-	i.value = int32(value)
+	u.value = value
 
 	// Mark the flag as set
-	i.set = true
+	u.set = true
 
 	return nil
 }
 
-func (i *int32Flag) String() string {
-	return i.sValue
+func (u *uint64Flag) String() string {
+	return u.sValue
 }

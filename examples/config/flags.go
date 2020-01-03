@@ -8,24 +8,38 @@ import "flag"
 
 type flags struct {
 	port    stringFlag
-	mock    boolFlag
-	timeout intFlag
-	at      timeFlag
+	retries intFlag
+	when    timeFlag
 	remote  urlFlag
+	timeout durationFlag
+	int32   int32Flag
+	uint64  uint64Flag
+	mock    boolFlag
+	at      unixFlag
+	idc     anyFlag
+	uint32  uint32Flag
+	int64   int64Flag
 }
 
 func newFlags() *flags {
 	var f flags
 
 	flag.Var(&f.port, "port", "Port that the server is hosted on")
-	flag.Var(&f.mock, "mock", "Whether to mock the backing data storage for testing")
-	flag.Var(&f.timeout, "timeout", "Set the default HTTP timeout")
-	flag.Var(&f.at, "at", "")
+	flag.Var(&f.retries, "retries", "Set the default HTTP timeout")
+	flag.Var(&f.when, "when", "")
 	flag.Var(&f.remote, "remote", "")
+	flag.Var(&f.timeout, "timeout", "")
+	flag.Var(&f.int32, "int32", "")
+	flag.Var(&f.uint64, "uint64", "")
+	flag.Var(&f.mock, "mock", "Whether to mock the backing data storage for testing")
+	flag.Var(&f.at, "at", "")
+	flag.Var(&f.idc, "idc", "")
+	flag.Var(&f.uint32, "uint32", "")
+	flag.Var(&f.int64, "int64", "")
 
 	// nested struct fields
 
-	f.at.layout = "2006-01-02T15:04:05Z07:00"
+	f.when.layout = "2006-01-02T15:04:05Z07:00"
 
 	return &f
 }
@@ -38,15 +52,8 @@ func (f *flags) required() {
 }
 
 func (f *flags) defaults() {
-	if !f.port.set {
-		var err = f.port.Set("8080")
-		if err != nil {
-			// _probably_ just for now
-			panic(err)
-		}
-	}
-	if !f.timeout.set {
-		var err = f.timeout.Set("15")
+	if !f.retries.set {
+		var err = f.retries.Set("5")
 		if err != nil {
 			// _probably_ just for now
 			panic(err)
@@ -57,9 +64,16 @@ func (f *flags) defaults() {
 func (f *flags) toConfig() Config {
 	return Config{
 		port:    f.port.value,
-		mock:    f.mock.value,
-		timeout: f.timeout.value,
-		at:      f.at.value,
+		retries: f.retries.value,
+		when:    f.when.value,
 		remote:  f.remote.value,
+		timeout: f.timeout.value,
+		int32:   f.int32.value,
+		uint64:  f.uint64.value,
+		mock:    f.mock.value,
+		at:      f.at.value,
+		idc:     f.idc.value,
+		uint32:  f.uint32.value,
+		int64:   f.int64.value,
 	}
 }

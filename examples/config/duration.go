@@ -5,36 +5,37 @@
 package config
 
 import (
-	"strconv"
+	"time"
 )
 
-type int32Flag struct {
+type durationFlag struct {
 	set    bool
-	value  int32
+	value  time.Duration
 	sValue string
 }
 
 // If flag is not provided it will not get to this function
-func (i *int32Flag) Set(x string) error {
-	// Set the string value
-	i.sValue = x
+func (d *durationFlag) Set(x string) error {
+	// In this case 'x' should be something like "2m" or "5h", etc
 
 	// Parse the value from the provided string
-	var value, err = strconv.ParseInt(i.sValue, 10, 32)
+	var value, err = time.ParseDuration(x)
 	if err != nil {
-		// TODO: test this out
 		return err
 	}
 
+	// Set the string value
+	d.sValue = x
+
 	// Set the actual value
-	i.value = int32(value)
+	d.value = value
 
 	// Mark the flag as set
-	i.set = true
+	d.set = true
 
 	return nil
 }
 
-func (i *int32Flag) String() string {
-	return i.sValue
+func (d *durationFlag) String() string {
+	return d.sValue
 }

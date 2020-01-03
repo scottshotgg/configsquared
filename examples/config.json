@@ -2,23 +2,45 @@
 	"port": {
 		"type": "string",
 		"description": "Port that the server is hosted on",
-		"default": "8080",
 		"required": true
 	},
 	"mock": {
 		"type": "bool",
 		"description": "Whether to mock the backing data storage for testing"
 	},
-	"timeout": {
+	"retries": {
 		"type": "int",
 		"description": "Set the default HTTP timeout",
-		"default": 15,
+		"default": 5,
 		"validate": true
 	},
 	"at": {
-		"type": "time"
+		"type": "time",
+		"format": "unix"
+	},
+	"when": {
+		"type": "time",
+		"format": "rfc3339"
 	},
 	"remote": {
 		"type": "url"
+	},
+	"timeout": {
+		"type": "duration"
+	},
+	"idc": {
+		"type": "any"
+	},
+	"int32": {
+		"type": "int32"
+	},
+	"uint32": {
+		"type": "uint32"
+	},
+	"int64": {
+		"type": "int64"
+	},
+	"uint64": {
+		"type": "uint64"
 	}
 }

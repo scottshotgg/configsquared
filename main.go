@@ -11,6 +11,7 @@ import (
 	"strconv"
 	"strings"
 	"time"
+	"github.com/prometheus/common/log"
 )
 
 type baseValue struct {
@@ -105,28 +106,28 @@ func main() {
 	if len(stmts.validators) > 0 {
 		err = stmts.createValidatorFile()
 		if err != nil {
-			panic(err)
+		log.Fatalln("err", err)
 		}
 	}
 
 	err = stmts.createConfigFile()
 	if err != nil {
-		panic(err)
+		log.Fatalln("err", err)
 	}
 
 	err = stmts.createFlagsFile()
 	if err != nil {
-		panic(err)
+		log.Fatalln("err", err)
 	}
 
 	err = stmts.copyLibFiles()
 	if err != nil {
-		panic(err)
+		log.Fatalln("err", err)
 	}
 
 	err = importAndFormat()
 	if err != nil {
-		panic(err)
+		log.Fatalln("err", err)
 	}
 
 	fmt.Println("Done!")
@@ -253,10 +254,21 @@ type statements struct {
 }
 
 func (s *statements) parseBase(k string, v *baseValue) {
+	// It doesn't make sense to require the value but then also provide a default... whats the point?
+	if v.Default != nil && v.Required {
+		panic(fmt.Errorf("cannot apply a default to a required value - { name: %s, default: %+v }", k, v.Default))
+	}
+
 	var (
 		configName = strings.ToLower(k)
 		configType = *v.Type
 	)
+
+	// Might need to be something here for the "real type"
+
+	if v.Format == "unix" {
+		configType = "unix"
+	}
 
 	s.libTypes[configType] = struct{}{}
 
@@ -338,6 +350,8 @@ func resolveExtraFields(configType, configName string, v *baseValue) []string {
 			if v.Format == "" {
 				// If both are empty, we will default to time.RFC3339
 				fields = append(fields, makeExtraField(configName, "layout", time.RFC3339))
+			} else if v.Format == "unix" {
+				// panic("wtf")
 			} else {
 				// Ensure that the time format is valid (one of Go's predefined time formats)
 				var f, ok = timeFormats[strings.ToLower(v.Format)]

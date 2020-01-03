@@ -24,7 +24,6 @@
 - `slice`
 - `complex64/128`
 - `any`
-- `location` (coordinates, idk)
 - ~~`time`~~
 - ~~`float32/64`~~
 - ~~`int32/64`~~
@@ -44,3 +43,5 @@
 - max
 - min
 - etc
+
+18. Add `example` as a valid key
