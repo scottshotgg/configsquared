@@ -52,7 +52,7 @@
 	"letters": {
 		"type": "array",
 		"items": {
-			"type": "integer"
+			"type": "int"
 		}
 	}
 }
