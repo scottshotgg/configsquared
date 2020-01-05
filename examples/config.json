@@ -34,11 +34,11 @@
 	"int32": {
 		"type": "int32"
 	},
-	"uint32": {
-		"type": "uint32"
-	},
 	"int64": {
 		"type": "int64"
+	},
+	"uint32": {
+		"type": "uint32"
 	},
 	"uint64": {
 		"type": "uint64"
