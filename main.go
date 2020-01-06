@@ -397,9 +397,6 @@ func timeFields(configName string, v *baseValue) []string {
 
 func resolveExtraFields(configType, configName string, v *baseValue) []string {
 	// If we have extra fields, we need to use them
-	if configType == "time" {
-	}
-
 	switch configType {
 	case "time":
 		return timeFields(configName, v)
