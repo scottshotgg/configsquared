@@ -3,7 +3,7 @@ package main
 import (
 	"fmt"
 
-	config "github.com/scottshotgg/config/examples/config"
+	config "github.com/scottshotgg/configsquared/examples/config"
 )
 
 // Make a new type so that we can implement config.Validator
