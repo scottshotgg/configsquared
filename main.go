@@ -349,53 +349,63 @@ var timeFormats = map[string]string{
 	"stampnano":  "Jan _2 15:04:05.000000000",
 }
 
-func resolveExtraFields(configType, configName string, v *baseValue) []string {
+func timeFields(configName string, v *baseValue) []string {
 	var fields []string
 
-	// If we have extra fields, we need to use them
-	if configType == "time" {
-		// Get the extra fields
-		// somehow check the fields?
-		// going to have to change "rfc3339" -> "time.RFC3339"
+	// Get the extra fields
+	// somehow check the fields?
+	// going to have to change "rfc3339" -> "time.RFC3339"
 
-		// We don't have a layout
-		if v.Layout == "" {
-			if v.Format == "" {
-				// If both are empty, we will default to time.RFC3339
-				fields = append(fields, makeExtraField(configName, "layout", time.RFC3339))
-			} else if v.Format == "unix" {
-				// panic("wtf")
-			} else {
-				// Ensure that the time format is valid (one of Go's predefined time formats)
-				var f, ok = timeFormats[strings.ToLower(v.Format)]
-				if !ok {
-					panic(fmt.Errorf("invalid time format: %s", v.Format))
-				}
-
-				fields = append(fields, makeExtraField(configName, "layout", f))
-			}
-			// We have a layout
+	// We don't have a layout
+	if v.Layout == "" {
+		if v.Format == "" {
+			// If both are empty, we will default to time.RFC3339
+			fields = append(fields, makeExtraField(configName, "layout", time.RFC3339))
+		} else if v.Format == "unix" {
+			// panic("wtf")
 		} else {
-			if v.Format != "" {
-				// Invalid - You cannot have a "layout" and a "format", it must be one of the other because a "format" ultimately produces a "layout"
-				panic(errors.New("cannot specify both a format and a layout; a format produces a layout"))
-			}
-
-			// First make sure they have not accidentally-ed the format into the layout
 			// Ensure that the time format is valid (one of Go's predefined time formats)
-			var _, ok = timeFormats[strings.ToLower(v.Layout)]
-			if ok {
-				panic(fmt.Errorf("please use the \"format\" attribute for a specific format: %s", v.Layout))
+			var f, ok = timeFormats[strings.ToLower(v.Format)]
+			if !ok {
+				panic(fmt.Errorf("invalid time format: %s", v.Format))
 			}
 
-			// Use their layout unconditionally
-			fmt.Println("Using provided layout:", v.Layout)
-
-			fields = append(fields, makeExtraField(configName, "layout", v.Layout))
+			fields = append(fields, makeExtraField(configName, "layout", f))
 		}
+		// We have a layout
+	} else {
+		if v.Format != "" {
+			// Invalid - You cannot have a "layout" and a "format", it must be one of the other because a "format" ultimately produces a "layout"
+			panic(errors.New("cannot specify both a format and a layout; a format produces a layout"))
+		}
+
+		// First make sure they have not accidentally-ed the format into the layout
+		// Ensure that the time format is valid (one of Go's predefined time formats)
+		var _, ok = timeFormats[strings.ToLower(v.Layout)]
+		if ok {
+			panic(fmt.Errorf("please use the \"format\" attribute for a specific format: %s", v.Layout))
+		}
+
+		// Use their layout unconditionally
+		fmt.Println("Using provided layout:", v.Layout)
+
+		fields = append(fields, makeExtraField(configName, "layout", v.Layout))
 	}
 
 	return fields
+}
+
+func resolveExtraFields(configType, configName string, v *baseValue) []string {
+	// If we have extra fields, we need to use them
+	if configType == "time" {
+	}
+
+	switch configType {
+	case "time":
+		return timeFields(configName, v)
+	}
+
+	return []string{}
 }
 
 // makeDefaultString takes an interface makes and either:
