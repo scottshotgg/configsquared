@@ -413,6 +413,25 @@ func resolveExtraFields(configType, configName string, v *baseValue) []string {
 	return []string{}
 }
 
+var (
+	types = map[string]string{
+		"int":      "0",
+		"int32":    "0",
+		"int64":    "0",
+		"uint":     "0",
+		"uint32":   "0",
+		"uint64":   "0",
+		"string":   "",
+		"bool":     "false",
+		"url":      "",
+		"time":     "",
+		"duration": "",
+		"ip":       "",
+		"ipv4":     "",
+		"ipv6":     "",
+	}
+)
+
 // makeDefaultString takes an interface makes and either:
 // makes a stringified default default (heh) value in the case of a nil default
 // or
@@ -420,29 +439,33 @@ func resolveExtraFields(configType, configName string, v *baseValue) []string {
 func makeDefaultString(typeOf string, d interface{}) string {
 	// If the default provided was nil (not specified), give it the Go default
 	if d == nil {
-		switch typeOf {
-		case "string":
-			return ""
-
-		case "int":
-			return "0"
-
-		case "bool":
-			return "false"
-
-		default:
+		var def, ok = types[typeOf]
+		if !ok {
 			panic(fmt.Errorf("invalid type: %s", typeOf))
 		}
+
+		return def
 	}
 
 	switch typeOf {
-	case "string":
+	case "url",
+		"time",
+		"duration",
+		"ip",
+		"ipv4",
+		"ipv6",
+		"string":
 		var dd, ok = d.(string)
 		if ok {
 			return dd
 		}
 
-	case "int":
+	case "uint",
+		"uint32",
+		"uint64",
+		"int",
+		"int32",
+		"int64":
 		// Go will unmarshal int fields to float64 due to the json spec
 		var dd, ok = d.(float64)
 		if ok {

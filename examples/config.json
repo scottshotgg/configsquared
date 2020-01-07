@@ -32,7 +32,8 @@
 		"type": "any"
 	},
 	"int32": {
-		"type": "int32"
+		"type": "int32",
+		"default": 8080
 	},
 	"int64": {
 		"type": "int64"

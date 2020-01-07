@@ -7,39 +7,39 @@ package config
 import "flag"
 
 type flags struct {
-	when    timeFlag
 	idc     anyFlag
-	uint64  uint64Flag
-	timeout durationFlag
-	int64   int64Flag
-	uint32  uint32Flag
-	byte    byteFlag
 	port    stringFlag
-	remote  urlFlag
-	int32   int32Flag
-	mock    boolFlag
+	timeout durationFlag
+	uint64  uint64Flag
+	rune    runeFlag
 	retries intFlag
 	at      unixFlag
-	rune    runeFlag
+	remote  urlFlag
+	int32   int32Flag
+	uint32  uint32Flag
+	mock    boolFlag
+	when    timeFlag
+	int64   int64Flag
+	byte    byteFlag
 }
 
 func newFlags() *flags {
 	var f flags
 
-	flag.Var(&f.when, "when", "")
 	flag.Var(&f.idc, "idc", "")
-	flag.Var(&f.uint64, "uint64", "")
-	flag.Var(&f.timeout, "timeout", "")
-	flag.Var(&f.int64, "int64", "")
-	flag.Var(&f.uint32, "uint32", "")
-	flag.Var(&f.byte, "byte", "")
 	flag.Var(&f.port, "port", "Port that the server is hosted on")
-	flag.Var(&f.remote, "remote", "")
-	flag.Var(&f.int32, "int32", "")
-	flag.Var(&f.mock, "mock", "Whether to mock the backing data storage for testing")
+	flag.Var(&f.timeout, "timeout", "")
+	flag.Var(&f.uint64, "uint64", "")
+	flag.Var(&f.rune, "rune", "")
 	flag.Var(&f.retries, "retries", "Set the default HTTP timeout")
 	flag.Var(&f.at, "at", "")
-	flag.Var(&f.rune, "rune", "")
+	flag.Var(&f.remote, "remote", "")
+	flag.Var(&f.int32, "int32", "")
+	flag.Var(&f.uint32, "uint32", "")
+	flag.Var(&f.mock, "mock", "Whether to mock the backing data storage for testing")
+	flag.Var(&f.when, "when", "")
+	flag.Var(&f.int64, "int64", "")
+	flag.Var(&f.byte, "byte", "")
 
 	// nested struct fields
 
@@ -63,23 +63,30 @@ func (f *flags) defaults() {
 			panic(err)
 		}
 	}
+	if !f.int32.set {
+		var err = f.int32.Set("8080")
+		if err != nil {
+			// _probably_ just for now
+			panic(err)
+		}
+	}
 }
 
 func (f *flags) toConfig() Config {
 	return Config{
-		when:    f.when.value,
 		idc:     f.idc.value,
-		uint64:  f.uint64.value,
-		timeout: f.timeout.value,
-		int64:   f.int64.value,
-		uint32:  f.uint32.value,
-		byte:    f.byte.value,
 		port:    f.port.value,
-		remote:  f.remote.value,
-		int32:   f.int32.value,
-		mock:    f.mock.value,
+		timeout: f.timeout.value,
+		uint64:  f.uint64.value,
+		rune:    f.rune.value,
 		retries: f.retries.value,
 		at:      f.at.value,
-		rune:    f.rune.value,
+		remote:  f.remote.value,
+		int32:   f.int32.value,
+		uint32:  f.uint32.value,
+		mock:    f.mock.value,
+		when:    f.when.value,
+		int64:   f.int64.value,
+		byte:    f.byte.value,
 	}
 }
