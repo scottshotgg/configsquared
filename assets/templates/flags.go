@@ -5,31 +5,31 @@
 package config
 
 type flags struct {
-	// flagFields
+	// {{ flagFields }}
 }
 
 func newFlags() *flags {
 	var f flags
 
-	// flagVars
+	// {{ flagVars }}
 
 	// nested struct fields
 
-	// extraFields
+	// {{ extraFields }}
 
 	return &f
 }
 
 func (f *flags) required() {
-	// requiredIfs
+	// {{ requiredIfs }}
 }
 
 func (f *flags) defaults() {
-	// defaultIfs
+	// {{ defaultIfs }}
 }
 
 func (f *flags) toConfig() Config {
 	return Config{
-		// mappers
+		// {{ mappers }}
 	}
 }

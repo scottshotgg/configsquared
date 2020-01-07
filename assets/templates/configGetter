@@ -1,3 +1,0 @@
-func (c *Config) %s() %s {
-	return c.%s
-}

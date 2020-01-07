@@ -19,7 +19,7 @@
 - `array`
 - `slice`
 - `object`
-- ~~`date`~~ - use `time` to do this
+- ~~`date`~~ - just use `time` if you want to do this
 - ~~`byte`~~
 - ~~`unix time`~~
 - ~~`duration`~~

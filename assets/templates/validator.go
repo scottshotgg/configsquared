@@ -5,5 +5,5 @@
 package config
 
 type Validator interface {
-	// validators
+	// {{ validators }}
 }

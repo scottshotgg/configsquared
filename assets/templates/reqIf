@@ -1,4 +1,0 @@
-if !f.%s.set {
-	// just for now
-	panic("%s is a required flag")
-}

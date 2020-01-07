@@ -11,20 +11,20 @@ import (
 )
 
 type Config struct {
-	at      time.Time
-	remote  url.URL
-	uint64  uint64
-	rune    rune
-	retries int
 	when    time.Time
 	idc     string
+	uint64  uint64
+	timeout time.Duration
 	int64   int64
+	uint32  uint32
 	byte    byte
 	port    string
-	timeout time.Duration
+	remote  url.URL
 	int32   int32
-	uint32  uint32
 	mock    bool
+	retries int
+	at      time.Time
+	rune    rune
 }
 
 var (
@@ -32,29 +32,23 @@ var (
 	c Config
 )
 
-func (c *Config) At() time.Time {
-	return c.at
-}
-func (c *Config) Remote() url.URL {
-	return c.remote
-}
-func (c *Config) Uint64() uint64 {
-	return c.uint64
-}
-func (c *Config) Rune() rune {
-	return c.rune
-}
-func (c *Config) Retries() int {
-	return c.retries
-}
 func (c *Config) When() time.Time {
 	return c.when
 }
 func (c *Config) Idc() string {
 	return c.idc
 }
+func (c *Config) Uint64() uint64 {
+	return c.uint64
+}
+func (c *Config) Timeout() time.Duration {
+	return c.timeout
+}
 func (c *Config) Int64() int64 {
 	return c.int64
+}
+func (c *Config) Uint32() uint32 {
+	return c.uint32
 }
 func (c *Config) Byte() byte {
 	return c.byte
@@ -62,17 +56,23 @@ func (c *Config) Byte() byte {
 func (c *Config) Port() string {
 	return c.port
 }
-func (c *Config) Timeout() time.Duration {
-	return c.timeout
+func (c *Config) Remote() url.URL {
+	return c.remote
 }
 func (c *Config) Int32() int32 {
 	return c.int32
 }
-func (c *Config) Uint32() uint32 {
-	return c.uint32
-}
 func (c *Config) Mock() bool {
 	return c.mock
+}
+func (c *Config) Retries() int {
+	return c.retries
+}
+func (c *Config) At() time.Time {
+	return c.at
+}
+func (c *Config) Rune() rune {
+	return c.rune
 }
 
 func Parse(v Validator) (*Config, error) {

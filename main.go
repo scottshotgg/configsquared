@@ -4,36 +4,91 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
-	"github.com/prometheus/common/log"
 	"io/ioutil"
 	"os"
 	"os/exec"
-	"path/filepath"
 	"strconv"
 	"strings"
 	"time"
+
+	"github.com/prometheus/common/log"
+	"github.com/scottshotgg/configsquared/assets"
 )
 
-type baseValue struct {
-	Type        *string
-	Description string
-	Required    bool
-	Validate    bool
-	Layout      string
-	Format      string
-	Items       *baseValue
-	Example     string
-	// Extra       map[string]string
-	// Example interface{}
-	// Format string?
-	// Qualifiers? regex, lt, gt, etc
+const (
+	rootAsset     = "assets/"
+	templateAsset = rootAsset + "templates/"
+	typesAsset    = rootAsset + "types/"
+)
 
-	Default interface{}
-}
+type (
+	baseValue struct {
+		Type        *string
+		Description string
+		Required    bool
+		Validate    bool
+		Layout      string
+		Format      string
+		Items       *baseValue
+		Example     string
+		// Extra       map[string]string
+		// Example interface{}
+		// Format string?
+		// Qualifiers? regex, lt, gt, etc
+
+		Default interface{}
+	}
+
+	statements struct {
+		libTypes map[string]struct{}
+
+		configFields  []string
+		configGetters []string
+
+		flagFields []string
+		flagVars   []string
+
+		requiredIfs []string
+		defaultIfs  []string
+
+		mappers []string
+
+		validators    []string
+		validateCalls []string
+
+		extraFields []string
+	}
+)
 
 var (
 	pwd  string
 	root string
+
+	allowedExtraFields = map[string][]string{
+		"time": []string{
+			"format",
+			"layout",
+		},
+	}
+
+	timeFormats = map[string]string{
+		"ansic":       "Mon Jan _2 15:04:05 2006",
+		"unixdate":    "Mon Jan _2 15:04:05 MST 2006",
+		"rubydate":    "Mon Jan 02 15:04:05 -0700 2006",
+		"rfc822":      "02 Jan 06 15:04 MST",
+		"rc822z":      "02 Jan 06 15:04 -0700",
+		"rfc850":      "Monday, 02-Jan-06 15:04:05 MST",
+		"rfc1123":     "Mon, 02 Jan 2006 15:04:05 MST",
+		"rfc1123Z":    "Mon, 02 Jan 2006 15:04:05 -0700",
+		"rfc3339":     "2006-01-02T15:04:05Z07:00",
+		"rfc3339nano": "2006-01-02T15:04:05.999999999Z07:00",
+		"kitchen":     "3:04PM",
+		// Handy time stamps.
+		"stamp":      "Jan _2 15:04:05",
+		"stampmilli": "Jan _2 15:04:05.000",
+		"stampmicro": "Jan _2 15:04:05.000000",
+		"stampnano":  "Jan _2 15:04:05.000000000",
+	}
 )
 
 func main() {
@@ -45,13 +100,6 @@ func main() {
 	}
 
 	pwd += "/"
-
-	root, err = filepath.Abs(os.Args[0])
-	if err != nil {
-		panic(err)
-	}
-
-	root = filepath.Dir(root) + "/"
 
 	// TODO: make this an arg
 	contents, err := ioutil.ReadFile(pwd + "config.json")
@@ -91,12 +139,12 @@ func main() {
 	fmt.Println("Generating package ...")
 
 	// Wipe the generated folder
-	err = removeDir()
+	err = removeConfigDir()
 	if err != nil {
 		panic(err)
 	}
 
-	err = createDir()
+	err = createConfigDir()
 	if err != nil {
 		panic(err)
 	}
@@ -144,21 +192,28 @@ func importAndFormat() error {
 	return exec.Command("gofmt", "-w", pwd+"config").Run()
 }
 
-func removeDir() error {
+func removeConfigDir() error {
 	return os.RemoveAll(pwd + "config")
 }
 
-func createDir() error {
+func createConfigDir() error {
 	return os.MkdirAll(pwd+"config", 0777)
 }
 
 func (s *statements) copyLibFiles() error {
-	var err error
-
 	// For not just copy the example files
 	for k := range s.libTypes {
-		// fmt.Println("copying \"" + root + "assets/types/" + k + ".go\" to " + pwd + "config/")
-		err = exec.Command("cp", root+"assets/types/"+k+".go", pwd+"config/").Run()
+		var (
+			fileName  = k + ".go"
+			assetName = typesAsset + fileName
+		)
+
+		a, err := assets.Asset(assetName)
+		if err != nil {
+			return errors.New("could not find asset: " + assetName)
+		}
+
+		err = ioutil.WriteFile(pwd+"config/"+fileName, a, 0666)
 		if err != nil {
 			return err
 		}
@@ -168,17 +223,17 @@ func (s *statements) copyLibFiles() error {
 }
 
 func (s *statements) createConfigFile() error {
-	var configTemplate, err = ioutil.ReadFile(root + "assets/templates/config.go")
+	var configTemplate, err = assets.Asset(templateAsset + "config.go")
 	if err != nil {
 		panic(err)
 	}
 
 	var cf = string(configTemplate)
 
-	cf = strings.Replace(cf, "// configFields",
+	cf = strings.Replace(cf, "// {{ configFields }}",
 		strings.Join(s.configFields, "\n"), 1)
 
-	cf = strings.Replace(cf, "// configGetters",
+	cf = strings.Replace(cf, "// {{ configGetters }}",
 		strings.Join(s.configGetters, "\n"), 1)
 
 	if len(s.validateCalls) > 0 {
@@ -194,70 +249,49 @@ func (s *statements) createConfigFile() error {
 	return ioutil.WriteFile(pwd+"config/config.go", []byte(cf), 0666)
 }
 
+// TODO: find some way to keep the values standard in the replace
 func (s *statements) createFlagsFile() error {
-	var flagTemplate, err = ioutil.ReadFile(root + "assets/templates/flags.go")
+	var flagTemplate, err = assets.Asset(templateAsset + "flags.go")
 	if err != nil {
 		panic(err)
 	}
 
 	var cf = string(flagTemplate)
 
-	cf = strings.Replace(cf, "// flagFields",
+	cf = strings.Replace(cf, "// {{ flagFields }}",
 		strings.Join(s.flagFields, "\n"), 1)
 
-	cf = strings.Replace(cf, "// flagVars",
+	cf = strings.Replace(cf, "// {{ flagVars }}",
 		strings.Join(s.flagVars, "\n"), 1)
 
-	cf = strings.Replace(cf, "// requiredIfs",
+	cf = strings.Replace(cf, "// {{ requiredIfs }}",
 		strings.Join(s.requiredIfs, "\n"), 1)
 
-	cf = strings.Replace(cf, "// defaultIfs",
+	cf = strings.Replace(cf, "// {{ defaultIfs }}",
 		strings.Join(s.defaultIfs, "\n"), 1)
 
-	cf = strings.Replace(cf, "// mappers",
+	cf = strings.Replace(cf, "// {{ mappers }}",
 		strings.Join(s.mappers, "\n"), 1)
 
-	cf = strings.Replace(cf, "// extraFields",
+	cf = strings.Replace(cf, "// {{ extraFields }}",
 		strings.Join(s.extraFields, "\n"), 1)
 
 	return ioutil.WriteFile(pwd+"config/flags.go", []byte(cf), 0666)
 }
 
 func (s *statements) createValidatorFile() error {
-	var validateTemplate, err = ioutil.ReadFile(root + "assets/templates/validator.go")
+	var validateTemplate, err = assets.Asset(templateAsset + "validator.go")
 	if err != nil {
 		panic(err)
 	}
 
-	var cf = strings.Replace(string(validateTemplate), "// validators",
+	var cf = strings.Replace(string(validateTemplate), "// {{ validators }}",
 		strings.Join(s.validators, "\n"), 1)
 
 	return ioutil.WriteFile(pwd+"config/validator.go", []byte(cf), 0666)
 }
 
-type statements struct {
-	libTypes map[string]struct{}
-
-	configFields  []string
-	configGetters []string
-
-	flagFields []string
-	flagVars   []string
-
-	requiredIfs []string
-	defaultIfs  []string
-
-	mappers []string
-
-	validators    []string
-	validateCalls []string
-
-	extraFields []string
-}
-
-func (s *statements) parseArray(k string, v *baseValue) {
-
-}
+func (s *statements) parseArray(k string, v *baseValue) {}
 
 func (s *statements) parseBase(k string, v *baseValue) {
 	// It doesn't make sense to require the value but then also provide a default... whats the point?
@@ -321,32 +355,6 @@ func (s *statements) parseBase(k string, v *baseValue) {
 	if len(allowedExtraFields[configType]) > 0 {
 		s.extraFields = append(s.extraFields, resolveExtraFields(configType, configName, v)...)
 	}
-}
-
-var allowedExtraFields = map[string][]string{
-	"time": []string{
-		"format",
-		"layout",
-	},
-}
-
-var timeFormats = map[string]string{
-	"ansic":       "Mon Jan _2 15:04:05 2006",
-	"unixdate":    "Mon Jan _2 15:04:05 MST 2006",
-	"rubydate":    "Mon Jan 02 15:04:05 -0700 2006",
-	"rfc822":      "02 Jan 06 15:04 MST",
-	"rc822z":      "02 Jan 06 15:04 -0700",
-	"rfc850":      "Monday, 02-Jan-06 15:04:05 MST",
-	"rfc1123":     "Mon, 02 Jan 2006 15:04:05 MST",
-	"rfc1123Z":    "Mon, 02 Jan 2006 15:04:05 -0700",
-	"rfc3339":     "2006-01-02T15:04:05Z07:00",
-	"rfc3339nano": "2006-01-02T15:04:05.999999999Z07:00",
-	"kitchen":     "3:04PM",
-	// Handy time stamps.
-	"stamp":      "Jan _2 15:04:05",
-	"stampmilli": "Jan _2 15:04:05.000",
-	"stampmicro": "Jan _2 15:04:05.000000",
-	"stampnano":  "Jan _2 15:04:05.000000000",
 }
 
 func timeFields(configName string, v *baseValue) []string {
