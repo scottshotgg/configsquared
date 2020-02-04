@@ -6,25 +6,11 @@ package config
 
 import (
 	"flag"
-	"net/url"
-	"time"
 )
 
 type Config struct {
-	idc     string
-	port    string
-	timeout time.Duration
-	uint64  uint64
-	rune    rune
-	retries int
-	at      time.Time
-	remote  url.URL
-	int32   int32
-	uint32  uint32
-	mock    bool
-	when    time.Time
-	int64   int64
-	byte    byte
+	port  string
+	ports []string
 }
 
 var (
@@ -32,50 +18,14 @@ var (
 	c Config
 )
 
-func (c *Config) Idc() string {
-	return c.idc
-}
 func (c *Config) Port() string {
 	return c.port
 }
-func (c *Config) Timeout() time.Duration {
-	return c.timeout
-}
-func (c *Config) Uint64() uint64 {
-	return c.uint64
-}
-func (c *Config) Rune() rune {
-	return c.rune
-}
-func (c *Config) Retries() int {
-	return c.retries
-}
-func (c *Config) At() time.Time {
-	return c.at
-}
-func (c *Config) Remote() url.URL {
-	return c.remote
-}
-func (c *Config) Int32() int32 {
-	return c.int32
-}
-func (c *Config) Uint32() uint32 {
-	return c.uint32
-}
-func (c *Config) Mock() bool {
-	return c.mock
-}
-func (c *Config) When() time.Time {
-	return c.when
-}
-func (c *Config) Int64() int64 {
-	return c.int64
-}
-func (c *Config) Byte() byte {
-	return c.byte
+func (c *Config) Ports() []string {
+	return c.ports
 }
 
-func Parse(v Validator) (*Config, error) {
+func Parse() *Config {
 	if !flag.Parsed() {
 		var f = newFlags()
 
@@ -85,20 +35,7 @@ func Parse(v Validator) (*Config, error) {
 		f.defaults()
 
 		c = f.toConfig()
-
-		return &c, c.validate(v)
 	}
 
-	return &c, nil
-}
-
-func (c *Config) validate(v Validator) error {
-	var err error
-
-	err = v.ValidateRetries(c.retries)
-	if err != nil {
-		return err
-	}
-
-	return nil
+	return &c
 }

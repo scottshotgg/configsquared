@@ -19,32 +19,34 @@ func (v *validator) ValidateRetries(retries int) error {
 }
 
 func main() {
-	// Since we have required validation, we need to pass our validator struct on Parse.
-	// Otherwise, config will Parse without validation and return only a Config struct pointer
-	var c, err = config.Parse(&validator{})
-	if err != nil {
-		panic(err)
-	}
+	// // Since we have required validation, we need to pass our validator struct on Parse.
+	// // Otherwise, config will Parse without validation and return only a Config struct pointer
+	// var c, err = config.Parse(&validator{})
+	// if err != nil {
+	// 	panic(err)
+	// }
 
-	fmt.Println("Using port:", c.Port())
+	// fmt.Println("Using port:", c.Port())
 
-	if c.Mock() {
-		fmt.Println("Mocking db")
-	}
+	// if c.Mock() {
+	// 	fmt.Println("Mocking db")
+	// }
 
-	fmt.Println("Amount of retries available:", c.Retries())
+	// fmt.Println("Amount of retries available:", c.Retries())
 
-	fmt.Println("HTTP timeout is", c.Timeout())
+	// fmt.Println("HTTP timeout is", c.Timeout())
 
-	fmt.Println("At:", c.At())
+	// fmt.Println("At:", c.At())
 
-	fmt.Println("When:", c.When())
+	// fmt.Println("When:", c.When())
 
-	fmt.Printf("Remote: %+v\n", c.Remote())
+	// fmt.Printf("Remote: %+v\n", c.Remote())
 
-	fmt.Println("Idc about this value:", c.Idc())
+	// fmt.Println("Idc about this value:", c.Idc())
 
-	fmt.Printf("Rune: %d %s\n", c.Rune(), string(c.Rune()))
+	// fmt.Printf("Rune: %d %s\n", c.Rune(), string(c.Rune()))
 
-	fmt.Printf("Byte: %d %s\n", c.Byte(), string(c.Byte()))
+	// fmt.Printf("Byte: %d %s\n", c.Byte(), string(c.Byte()))
+
+	fmt.Printf("c: %+v\n", config.Parse())
 }
