@@ -14,11 +14,12 @@ func makeFuncName(k string) string {
 }
 
 var realType = map[string]string{
-	"unix":     "time.Time",
-	"time":     "time.Time",
-	"duration": "time.Duration",
-	"url":      "url.URL",
-	"any":      "string",
+	"unix":        "time.Time",
+	"time":        "time.Time",
+	"duration":    "time.Duration",
+	"url":         "url.URL",
+	"any":         "string",
+	"stringArray": "[]string",
 }
 
 func makeConfigField(configName, configType string) string {

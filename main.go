@@ -19,6 +19,9 @@ const (
 	rootAsset     = "assets/"
 	templateAsset = rootAsset + "templates/"
 	typesAsset    = rootAsset + "types/"
+	zeroString    = "0"
+	falseString   = "false"
+	emptyString   = ""
 )
 
 type (
@@ -89,6 +92,23 @@ var (
 		"stampmicro": "Jan _2 15:04:05.000000",
 		"stampnano":  "Jan _2 15:04:05.000000000",
 	}
+
+	types = map[string]string{
+		"int":      zeroString,
+		"int32":    zeroString,
+		"int64":    zeroString,
+		"uint":     zeroString,
+		"uint32":   zeroString,
+		"uint64":   zeroString,
+		"string":   emptyString,
+		"bool":     falseString,
+		"url":      emptyString,
+		"time":     emptyString,
+		"duration": emptyString,
+		"ip":       emptyString,
+		"ipv4":     emptyString,
+		"ipv6":     emptyString,
+	}
 )
 
 func main() {
@@ -123,17 +143,21 @@ func main() {
 	for k := range config {
 		var v = config[k]
 
-		// fmt.Println("k, v", k, v)
+		fmt.Printf("k, v: %+v\n %+v\n", k, v)
 
 		if v.Type == nil {
 			// TODO: No type provided; assume its an object
-			// skip struct config objects for now
-			fmt.Printf("struct not implemented: %s - %v\n", k, v)
-
+			// not sure if I want to do this
 			continue
 		}
 
-		stmts.parseBase(k, v)
+		switch *v.Type {
+		case "object":
+			stmts.parseStruct(k, v)
+
+		default:
+			stmts.parseBase(k, v)
+		}
 	}
 
 	fmt.Println("Generating package ...")
@@ -183,6 +207,7 @@ func main() {
 	fmt.Println("Done!")
 }
 
+// TODO: should probably check if they have this and if they dont then throw an error or offer to install it for them
 func importAndFormat() error {
 	var err = exec.Command("goimports", "-w", pwd+"config").Run()
 	if err != nil {
@@ -293,6 +318,23 @@ func (s *statements) createValidatorFile() error {
 
 func (s *statements) parseArray(k string, v *baseValue) {}
 
+var (
+	embeddedStructTemplate = "type %s struct {\n%s\n}"
+)
+
+func (s *statements) parseStruct(k string, v *baseValue) {
+	fmt.Printf("i be parsing struct: %s, %+v\n", k, *v)
+
+	/*
+		flag: needs to be mongo.port, mongo.addr, mongo.etc...
+		config: value needs to be a custom struct
+	*/
+
+	// add parent struct type to makeConfigGetter
+	// <<< ULTIMATELY add parent struct name to parseBase >>>
+	// s.configFields = append(s.configFields, makeConfigField(configName, configType))
+}
+
 func (s *statements) parseBase(k string, v *baseValue) {
 	// It doesn't make sense to require the value but then also provide a default... whats the point?
 	if v.Default != nil && v.Required {
@@ -304,17 +346,29 @@ func (s *statements) parseBase(k string, v *baseValue) {
 		configType = *v.Type
 	)
 
-	// Might need to be something here for the "real type"
+	// Determine if we have an array
+	if strings.Contains(configType, "[") || strings.Contains(configType, "]") {
+		configType = strings.Replace(configType, "[", "", 1)
+		configType = strings.Replace(configType, "]", "", 1)
+		fmt.Println("configTypedStripped", configType)
 
-	// We have an array
-	if v.Items != nil {
-		// TODO: implement array parsing
-		panic(fmt.Errorf("arrays are not implemented: %s", k))
-		// s.parseArray(k, v)
+		configType = configType + "Array"
 	}
 
-	if v.Format == "unix" {
-		configType = "unix"
+	// Might need to be something here for the "real type"
+
+	// // We have an array
+	// if v.Items != nil {
+	// 	// TODO: implement array parsing
+	// 	panic(fmt.Errorf("arrays are not implemented: %s", k))
+	// 	// s.parseArray(k, v)
+	// }
+
+	// If it is a `time` type and they want `unix` format then we need
+	// to technically change the type since `unix` is an integer
+	// instead of a string and it will be parsed differently
+	if configType == "time" && v.Format == "unix" {
+		configType = v.Format
 	}
 
 	s.libTypes[configType] = struct{}{}
@@ -412,25 +466,6 @@ func resolveExtraFields(configType, configName string, v *baseValue) []string {
 
 	return []string{}
 }
-
-var (
-	types = map[string]string{
-		"int":      "0",
-		"int32":    "0",
-		"int64":    "0",
-		"uint":     "0",
-		"uint32":   "0",
-		"uint64":   "0",
-		"string":   "",
-		"bool":     "false",
-		"url":      "",
-		"time":     "",
-		"duration": "",
-		"ip":       "",
-		"ipv4":     "",
-		"ipv6":     "",
-	}
-)
 
 // makeDefaultString takes an interface makes and either:
 // makes a stringified default default (heh) value in the case of a nil default
