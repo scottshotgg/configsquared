@@ -385,7 +385,7 @@ func (s *statements) parseStruct(k string, v *baseValue) {
 		},
 	`
 
-	s.mappers = append(s.mappers, fmt.Sprintf(mappers, k, strings.ToUpper(k[0:1])+k[1:], strings.Join(s1.mappers, "\n")))
+	s.mappers = append(s.mappers, fmt.Sprintf(mappers, k, strings.ToUpper(k[0:1])+strings.ToLower(k[1:]), strings.Join(s1.mappers, "\n")))
 
 	// if v.Validate {
 	// 	s.validators = append(s.validators, makeValidator(k, configName, configType))
