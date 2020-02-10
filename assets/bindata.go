@@ -113,7 +113,7 @@ func assetsBindataGo() (*asset, error) {
 		return nil, err
 	}
 
-	info := bindataFileInfo{name: "assets/bindata.go", size: 0, mode: os.FileMode(420), modTime: time.Unix(1580613996, 0)}
+	info := bindataFileInfo{name: "assets/bindata.go", size: 0, mode: os.FileMode(420), modTime: time.Unix(1581375125, 0)}
 	a := &asset{bytes: bytes, info: info}
 	return a, nil
 }
@@ -578,7 +578,7 @@ func assetsTypesStringGo() (*asset, error) {
 	return a, nil
 }
 
-var _assetsTypesStringarrayGo = []byte("\x1f\x8b\x08\x00\x00\x00\x00\x00\x00\xff\x7c\x8f\x31\x8f\xd3\x40\x10\x85\x6b\xcf\xaf\x78\x4a\x95\x20\xb0\x7b\xd0\x15\x88\x03\xe9\x1a\x0e\x89\x13\x0d\xa2\x58\xdb\xb3\x9b\x11\xf6\x6e\x98\x1d\x87\x58\x51\xfe\x3b\xda\xd8\x49\x41\x71\xdd\xbc\xa7\x99\x37\xdf\x6b\x1a\x7c\x4a\x3d\x23\x70\x64\x75\xc6\x3d\xda\x19\x41\x6c\x3f\xb5\x75\x97\xc6\x26\x77\xc9\x2c\xef\x93\x85\xd0\x74\x29\x7a\x09\xf9\xcf\xe4\x94\xfb\x0f\x78\x7c\xc6\xd7\xe7\x17\x7c\x7e\x7c\x7a\xa9\x89\x9a\x06\x4f\x06\xc9\x90\x88\x39\x4d\x8a\x96\xb3\x41\xa2\xb1\x96\xa1\x6c\x5a\x02\xf7\x62\xb0\xbd\x64\x78\x19\x18\x2e\x43\x0c\x7f\x65\x18\xd0\x32\x94\xc7\x74\xe4\x1e\xe2\xa1\xfc\xee\x4e\x54\x13\x1d\x5c\xf7\xdb\x05\xc6\x42\x40\x24\xe3\x21\xa9\x61\xe3\x47\xdb\x10\xd9\x7c\x60\x64\x53\x89\xe1\xa3\xaa\x9b\xbf\x0c\x2e\x14\x3d\x75\x86\x33\x55\x99\x0d\x00\xda\x94\x06\xaa\xf2\x0f\x37\x4c\xb7\x6d\xaa\x8e\x57\x85\x9f\xbf\x56\xe3\xb2\x14\xf1\xf0\x25\x43\x32\x62\x32\x1c\x34\x1d\xa5\x2f\x60\x2b\x6b\x31\x03\x5b\x29\xb4\x74\x99\x62\x67\x92\x22\x95\x01\xdb\xec\xf1\xe6\x3f\x9c\x1d\xbe\xb3\x6d\x4f\xeb\xdf\x1d\x58\x35\xe9\x15\xce\xd7\x2b\xd2\x03\x4e\xb4\x68\x36\x3c\xc0\x74\x62\xa2\xca\x8f\x56\x7f\x53\x89\x36\xc4\xed\x66\xa1\x4d\x7e\x8d\x81\x2b\xf1\xef\x37\x6f\x71\xda\x2d\xa7\xc7\x35\xe9\xd6\xe7\x7c\x21\xaa\x94\x6d\xd2\x88\x28\x43\xa9\xf7\x1a\xe2\xd5\xd8\xee\x6e\xf1\xe7\xfb\xed\x9d\x92\x2e\xf4\x2f\x00\x00\xff\xff\x55\x91\x73\xbc\x32\x02\x00\x00")
+var _assetsTypesStringarrayGo = []byte("\x1f\x8b\x08\x00\x00\x00\x00\x00\x00\xff\x7c\x91\x41\x6f\xd4\x3e\x10\xc5\xcf\x9e\x4f\xf1\xfe\x91\xfe\x55\x02\x25\xe1\x5c\xb4\x07\x44\x41\xea\x85\x45\x6a\xc5\x05\x71\x70\x92\x71\x6a\xe1\xd8\xc1\x9e\x84\x5d\x55\xfd\xee\xc8\x49\xba\x87\x1e\x38\xd9\xf3\x34\x1e\xff\xde\x9b\xa6\xc1\xa7\xd0\x33\x06\xf6\x1c\xb5\x70\x8f\xf6\x8c\xc1\xca\xe3\xdc\xd6\x5d\x18\x9b\xd4\x05\x91\xf4\x18\x64\x18\x9a\x2e\x78\x63\x87\xf4\x7b\xd6\x91\xfb\x0f\xb8\x3d\xe2\xeb\xf1\x01\x9f\x6f\xef\x1e\x6a\xa2\xa6\xc1\x9d\xc0\x26\x58\x8f\x73\x98\x23\x5a\x4e\x02\xeb\x85\x63\xbe\xe4\x4e\x09\xe0\xde\x0a\xe4\xd1\x26\x18\xeb\x18\x3a\xc1\x0a\xfe\x58\xe7\xd0\x32\x22\x8f\x61\xe1\x1e\xd6\x20\xf2\xbb\x0b\x51\x4d\x34\xe9\xee\x97\x1e\x18\x1b\x01\x91\x1d\xa7\x10\x05\x25\xa9\xc2\x8c\x52\x90\x2a\x92\x44\xeb\x87\x54\x50\x45\x24\xe7\x89\xb1\x09\x1f\x63\xd4\xe7\x2f\x4e\x0f\xb9\x9e\x3b\xc1\x13\xa9\xc4\x02\x00\x6d\x08\x8e\x54\xfa\xae\xdd\xfc\xd2\x4d\x6a\x59\x2b\xfc\xf8\xb9\x0b\xcf\x9b\x31\x03\x93\x67\xd8\x04\x1f\x04\x53\x0c\x8b\xed\x33\xe8\xce\x9e\xc5\x81\x25\x1b\xdc\xbc\xcd\xbe\x13\x1b\x3c\xe5\x0b\xca\x64\xf0\xe6\x15\x4e\x85\x7b\x96\xf2\xb4\xff\x5b\x81\x63\x0c\x71\x85\x33\xf5\x8e\x74\xc0\x89\xb6\x9a\x05\x07\x48\x9c\x99\x48\x99\x51\xea\x6f\xd1\x7a\x71\xbe\x2c\x36\xda\x60\xf6\x31\xd0\x79\xfc\x4d\x71\x8d\x53\xb5\x3d\x5d\xf6\x49\x7b\x3a\xf5\xfd\xe4\xac\x94\xa7\x6b\x14\xd7\x45\x45\xca\x1a\x38\xf6\xe5\x4b\x63\x85\xc3\x01\xef\x71\x75\xb5\xaa\xa7\x0a\xff\xe5\xf2\x89\x94\x6a\x1a\x3c\x1c\x6f\x8f\x37\xfb\x8a\x30\x69\x6f\x3b\x52\x6a\x3d\xcb\xcc\x74\x3f\x65\x28\x53\x16\x39\x0b\xdd\x3a\xce\x61\x4c\x3a\x26\xc6\x60\x17\xf6\xd0\x71\x98\x47\xf6\x6b\x48\x3b\x6e\x72\xb6\xe3\x1b\xfc\xff\x76\x59\x91\x2b\x52\xcf\xaf\x1d\x6a\x23\x1c\x91\x32\x76\xf6\x75\x21\x25\x52\x91\x65\x8e\x1e\xde\xba\xbc\xa5\x7f\x25\xbd\x0a\x65\xf5\xf2\xed\xd3\xe5\xed\x25\x6c\x7a\xa6\xbf\x01\x00\x00\xff\xff\x4a\x2d\xa0\x83\x09\x03\x00\x00")
 
 func assetsTypesStringarrayGoBytes() ([]byte, error) {
 	return bindataRead(
@@ -593,7 +593,7 @@ func assetsTypesStringarrayGo() (*asset, error) {
 		return nil, err
 	}
 
-	info := bindataFileInfo{name: "assets/types/stringArray.go", size: 562, mode: os.FileMode(420), modTime: time.Unix(1580613993, 0)}
+	info := bindataFileInfo{name: "assets/types/stringArray.go", size: 777, mode: os.FileMode(420), modTime: time.Unix(1581119373, 0)}
 	a := &asset{bytes: bytes, info: info}
 	return a, nil
 }
@@ -770,37 +770,37 @@ func AssetNames() []string {
 
 // _bindata is a table, holding each asset generator, mapped to its name.
 var _bindata = map[string]func() (*asset, error){
-	"assets/bindata.go":             assetsBindataGo,
-	"assets/templates/config.go":    assetsTemplatesConfigGo,
-	"assets/templates/flags.go":     assetsTemplatesFlagsGo,
-	"assets/templates/template.go":  assetsTemplatesTemplateGo,
+	"assets/bindata.go": assetsBindataGo,
+	"assets/templates/config.go": assetsTemplatesConfigGo,
+	"assets/templates/flags.go": assetsTemplatesFlagsGo,
+	"assets/templates/template.go": assetsTemplatesTemplateGo,
 	"assets/templates/validator.go": assetsTemplatesValidatorGo,
-	"assets/types/any.go":           assetsTypesAnyGo,
-	"assets/types/array.go":         assetsTypesArrayGo,
-	"assets/types/bool.go":          assetsTypesBoolGo,
-	"assets/types/byte.go":          assetsTypesByteGo,
-	"assets/types/date.go":          assetsTypesDateGo,
-	"assets/types/duration.go":      assetsTypesDurationGo,
-	"assets/types/float32.go":       assetsTypesFloat32Go,
-	"assets/types/float64.go":       assetsTypesFloat64Go,
-	"assets/types/int.go":           assetsTypesIntGo,
-	"assets/types/int32.go":         assetsTypesInt32Go,
-	"assets/types/int64.go":         assetsTypesInt64Go,
-	"assets/types/ip.go":            assetsTypesIpGo,
-	"assets/types/ipv4.go":          assetsTypesIpv4Go,
-	"assets/types/ipv6.go":          assetsTypesIpv6Go,
-	"assets/types/location.go":      assetsTypesLocationGo,
-	"assets/types/mongo.go":         assetsTypesMongoGo,
-	"assets/types/rune.go":          assetsTypesRuneGo,
-	"assets/types/slice.go":         assetsTypesSliceGo,
-	"assets/types/string.go":        assetsTypesStringGo,
-	"assets/types/stringArray.go":   assetsTypesStringarrayGo,
-	"assets/types/time.go":          assetsTypesTimeGo,
-	"assets/types/uint.go":          assetsTypesUintGo,
-	"assets/types/uint32.go":        assetsTypesUint32Go,
-	"assets/types/uint64.go":        assetsTypesUint64Go,
-	"assets/types/unix.go":          assetsTypesUnixGo,
-	"assets/types/url.go":           assetsTypesUrlGo,
+	"assets/types/any.go": assetsTypesAnyGo,
+	"assets/types/array.go": assetsTypesArrayGo,
+	"assets/types/bool.go": assetsTypesBoolGo,
+	"assets/types/byte.go": assetsTypesByteGo,
+	"assets/types/date.go": assetsTypesDateGo,
+	"assets/types/duration.go": assetsTypesDurationGo,
+	"assets/types/float32.go": assetsTypesFloat32Go,
+	"assets/types/float64.go": assetsTypesFloat64Go,
+	"assets/types/int.go": assetsTypesIntGo,
+	"assets/types/int32.go": assetsTypesInt32Go,
+	"assets/types/int64.go": assetsTypesInt64Go,
+	"assets/types/ip.go": assetsTypesIpGo,
+	"assets/types/ipv4.go": assetsTypesIpv4Go,
+	"assets/types/ipv6.go": assetsTypesIpv6Go,
+	"assets/types/location.go": assetsTypesLocationGo,
+	"assets/types/mongo.go": assetsTypesMongoGo,
+	"assets/types/rune.go": assetsTypesRuneGo,
+	"assets/types/slice.go": assetsTypesSliceGo,
+	"assets/types/string.go": assetsTypesStringGo,
+	"assets/types/stringArray.go": assetsTypesStringarrayGo,
+	"assets/types/time.go": assetsTypesTimeGo,
+	"assets/types/uint.go": assetsTypesUintGo,
+	"assets/types/uint32.go": assetsTypesUint32Go,
+	"assets/types/uint64.go": assetsTypesUint64Go,
+	"assets/types/unix.go": assetsTypesUnixGo,
+	"assets/types/url.go": assetsTypesUrlGo,
 }
 
 // AssetDir returns the file names below a certain
@@ -842,43 +842,42 @@ type bintree struct {
 	Func     func() (*asset, error)
 	Children map[string]*bintree
 }
-
 var _bintree = &bintree{nil, map[string]*bintree{
 	"assets": &bintree{nil, map[string]*bintree{
 		"bindata.go": &bintree{assetsBindataGo, map[string]*bintree{}},
 		"templates": &bintree{nil, map[string]*bintree{
-			"config.go":    &bintree{assetsTemplatesConfigGo, map[string]*bintree{}},
-			"flags.go":     &bintree{assetsTemplatesFlagsGo, map[string]*bintree{}},
-			"template.go":  &bintree{assetsTemplatesTemplateGo, map[string]*bintree{}},
+			"config.go": &bintree{assetsTemplatesConfigGo, map[string]*bintree{}},
+			"flags.go": &bintree{assetsTemplatesFlagsGo, map[string]*bintree{}},
+			"template.go": &bintree{assetsTemplatesTemplateGo, map[string]*bintree{}},
 			"validator.go": &bintree{assetsTemplatesValidatorGo, map[string]*bintree{}},
 		}},
 		"types": &bintree{nil, map[string]*bintree{
-			"any.go":         &bintree{assetsTypesAnyGo, map[string]*bintree{}},
-			"array.go":       &bintree{assetsTypesArrayGo, map[string]*bintree{}},
-			"bool.go":        &bintree{assetsTypesBoolGo, map[string]*bintree{}},
-			"byte.go":        &bintree{assetsTypesByteGo, map[string]*bintree{}},
-			"date.go":        &bintree{assetsTypesDateGo, map[string]*bintree{}},
-			"duration.go":    &bintree{assetsTypesDurationGo, map[string]*bintree{}},
-			"float32.go":     &bintree{assetsTypesFloat32Go, map[string]*bintree{}},
-			"float64.go":     &bintree{assetsTypesFloat64Go, map[string]*bintree{}},
-			"int.go":         &bintree{assetsTypesIntGo, map[string]*bintree{}},
-			"int32.go":       &bintree{assetsTypesInt32Go, map[string]*bintree{}},
-			"int64.go":       &bintree{assetsTypesInt64Go, map[string]*bintree{}},
-			"ip.go":          &bintree{assetsTypesIpGo, map[string]*bintree{}},
-			"ipv4.go":        &bintree{assetsTypesIpv4Go, map[string]*bintree{}},
-			"ipv6.go":        &bintree{assetsTypesIpv6Go, map[string]*bintree{}},
-			"location.go":    &bintree{assetsTypesLocationGo, map[string]*bintree{}},
-			"mongo.go":       &bintree{assetsTypesMongoGo, map[string]*bintree{}},
-			"rune.go":        &bintree{assetsTypesRuneGo, map[string]*bintree{}},
-			"slice.go":       &bintree{assetsTypesSliceGo, map[string]*bintree{}},
-			"string.go":      &bintree{assetsTypesStringGo, map[string]*bintree{}},
+			"any.go": &bintree{assetsTypesAnyGo, map[string]*bintree{}},
+			"array.go": &bintree{assetsTypesArrayGo, map[string]*bintree{}},
+			"bool.go": &bintree{assetsTypesBoolGo, map[string]*bintree{}},
+			"byte.go": &bintree{assetsTypesByteGo, map[string]*bintree{}},
+			"date.go": &bintree{assetsTypesDateGo, map[string]*bintree{}},
+			"duration.go": &bintree{assetsTypesDurationGo, map[string]*bintree{}},
+			"float32.go": &bintree{assetsTypesFloat32Go, map[string]*bintree{}},
+			"float64.go": &bintree{assetsTypesFloat64Go, map[string]*bintree{}},
+			"int.go": &bintree{assetsTypesIntGo, map[string]*bintree{}},
+			"int32.go": &bintree{assetsTypesInt32Go, map[string]*bintree{}},
+			"int64.go": &bintree{assetsTypesInt64Go, map[string]*bintree{}},
+			"ip.go": &bintree{assetsTypesIpGo, map[string]*bintree{}},
+			"ipv4.go": &bintree{assetsTypesIpv4Go, map[string]*bintree{}},
+			"ipv6.go": &bintree{assetsTypesIpv6Go, map[string]*bintree{}},
+			"location.go": &bintree{assetsTypesLocationGo, map[string]*bintree{}},
+			"mongo.go": &bintree{assetsTypesMongoGo, map[string]*bintree{}},
+			"rune.go": &bintree{assetsTypesRuneGo, map[string]*bintree{}},
+			"slice.go": &bintree{assetsTypesSliceGo, map[string]*bintree{}},
+			"string.go": &bintree{assetsTypesStringGo, map[string]*bintree{}},
 			"stringArray.go": &bintree{assetsTypesStringarrayGo, map[string]*bintree{}},
-			"time.go":        &bintree{assetsTypesTimeGo, map[string]*bintree{}},
-			"uint.go":        &bintree{assetsTypesUintGo, map[string]*bintree{}},
-			"uint32.go":      &bintree{assetsTypesUint32Go, map[string]*bintree{}},
-			"uint64.go":      &bintree{assetsTypesUint64Go, map[string]*bintree{}},
-			"unix.go":        &bintree{assetsTypesUnixGo, map[string]*bintree{}},
-			"url.go":         &bintree{assetsTypesUrlGo, map[string]*bintree{}},
+			"time.go": &bintree{assetsTypesTimeGo, map[string]*bintree{}},
+			"uint.go": &bintree{assetsTypesUintGo, map[string]*bintree{}},
+			"uint32.go": &bintree{assetsTypesUint32Go, map[string]*bintree{}},
+			"uint64.go": &bintree{assetsTypesUint64Go, map[string]*bintree{}},
+			"unix.go": &bintree{assetsTypesUnixGo, map[string]*bintree{}},
+			"url.go": &bintree{assetsTypesUrlGo, map[string]*bintree{}},
 		}},
 	}},
 }}
@@ -929,3 +928,4 @@ func _filePath(dir, name string) string {
 	cannonicalName := strings.Replace(name, "\\", "/", -1)
 	return filepath.Join(append([]string{dir}, strings.Split(cannonicalName, "/")...)...)
 }
+

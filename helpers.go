@@ -40,11 +40,38 @@ func makeConfigGetter(k, configName, configType string) string {
 	return fmt.Sprintf(configGetter, makeFuncName(k), configType, configName)
 }
 
-func makeFlagField(configName, configType string) string {
+func makeNestedConfigGetter(base, k, configName, configType string) string {
+	var rt = realType[configType]
+	if len(rt) > 0 {
+		configType = rt
+	}
+
+	return fmt.Sprintf(nestedConfigGetter, base, makeFuncName(k), configType, configName)
+}
+
+func makeNestedStructConfigGetter(base, k, configName, configType string) string {
+	var rt = realType[configType]
+	if len(rt) > 0 {
+		configType = rt
+	}
+
+	return fmt.Sprintf(nestedStructConfigGetter, base, makeFuncName(k), configType, configName)
+}
+
+func makeFlagField(base, configName, configType string) string {
+	if base != "" {
+		// return fmt.Sprintf(flagVar, base+strings.ToUpper(configName[0:1])+configName[1:], base+"."+configName)
+		return fmt.Sprintf(flagField, base+strings.ToUpper(configName[0:1])+configName[1:], configType)
+	}
+
 	return fmt.Sprintf(flagField, configName, configType)
 }
 
-func makeFlagVar(configName, desc string) string {
+func makeFlagVar(base, configName, desc string) string {
+	if base != "" {
+		return fmt.Sprintf(flagVar, base+strings.ToUpper(configName[0:1])+configName[1:], base+"."+configName, desc)
+	}
+
 	return fmt.Sprintf(flagVar, configName, configName, desc)
 }
 
@@ -54,6 +81,10 @@ func makeRequiredIf(configName string) string {
 
 func makeMapper(configName string) string {
 	return fmt.Sprintf(mapper, configName, configName)
+}
+
+func makeNestedMapper(configName, nestedName string) string {
+	return fmt.Sprintf(mapper, configName, nestedName)
 }
 
 func makeDefaultIf(configName, configType string, def interface{}) string {

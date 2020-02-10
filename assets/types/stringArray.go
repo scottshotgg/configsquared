@@ -4,7 +4,10 @@
 
 package config
 
-import "fmt"
+import (
+	"fmt"
+	"strings"
+)
 
 type stringArrayFlag struct {
 	set    bool
@@ -20,7 +23,13 @@ func (sf *stringArrayFlag) Set(x string) error {
 
 	fmt.Println("value of string array:", x)
 
-	sf.value = []string{}
+	sf.value = strings.Split(x, ",")
+	if len(sf.value) == 0 && len(x) != 0 {
+		// TODO: remove panic
+		panic(fmt.Sprintf("not able to parse given argument to string slice: %+v", x))
+	}
+
+	fmt.Println("after split:", sf.value)
 
 	return nil
 }

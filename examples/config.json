@@ -1,8 +1,16 @@
 {
-	"port": {
-		"type": "string"
+	"db": {
+		"type": "object",
+		"attributes": {
+			"porterino": {
+				"type": "int"
+			},
+			"addr": {
+				"type": "string"
+			}
+		}
 	},
 	"ports": {
-		"type": "[string]"
+		"type": "stringArray"
 	}
 }

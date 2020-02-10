@@ -7,6 +7,15 @@ var (
 	return c.%s
 }`
 
+	nestedConfigGetter = `func (c *%s) %s() %s {
+	return c.%s
+}`
+
+	nestedStructConfigGetter = `func (c *%s) %s() *%s {
+	var c1 = c.%s
+	return &c1
+}`
+
 	flagField = `%s %sFlag`
 
 	flagVar = `flag.Var(&f.%s, "%s", "%s")`

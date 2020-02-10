@@ -9,8 +9,9 @@ import (
 )
 
 type Config struct {
-	db    Db
-	ports []string
+	addr string
+	port string
+	db   Db
 }
 
 var (
@@ -18,8 +19,14 @@ var (
 	c Config
 )
 
-func (c *Config) Ports() []string {
-	return c.ports
+func (c *Config) Addr() string {
+	return c.addr
+}
+func (c *Config) Port() string {
+	return c.port
+}
+func (c *Config) Db() Db {
+	return c.db
 }
 
 func Parse() *Config {

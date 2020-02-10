@@ -32,7 +32,7 @@ type (
 		Validate    bool
 		Layout      string
 		Format      string
-		Items       *baseValue
+		Attributes  map[string]*baseValue
 		Example     string
 		// Extra       map[string]string
 		// Example interface{}
@@ -134,6 +134,17 @@ func main() {
 		panic(err)
 	}
 
+	// Wipe the generated folder
+	err = removeConfigDir()
+	if err != nil {
+		panic(err)
+	}
+
+	err = createConfigDir()
+	if err != nil {
+		panic(err)
+	}
+
 	// fmt.Printf("config: %+v\n", config)
 
 	var stmts = statements{
@@ -156,22 +167,11 @@ func main() {
 			stmts.parseStruct(k, v)
 
 		default:
-			stmts.parseBase(k, v)
+			stmts.parseBase("", k, v)
 		}
 	}
 
 	fmt.Println("Generating package ...")
-
-	// Wipe the generated folder
-	err = removeConfigDir()
-	if err != nil {
-		panic(err)
-	}
-
-	err = createConfigDir()
-	if err != nil {
-		panic(err)
-	}
 
 	// If there is a validator function, that means something requested validation.
 	// In this case:
@@ -238,7 +238,7 @@ func (s *statements) copyLibFiles() error {
 			return errors.New("could not find asset: " + assetName)
 		}
 
-		err = ioutil.WriteFile(pwd+"config/"+fileName, a, 0666)
+		err = ioutil.WriteFile(pwd+"config/"+fileName, a, 0777)
 		if err != nil {
 			return err
 		}
@@ -319,12 +319,91 @@ func (s *statements) createValidatorFile() error {
 func (s *statements) parseArray(k string, v *baseValue) {}
 
 var (
-	embeddedStructTemplate = "type %s struct {\n%s\n}"
+	nestedStructTemplate = `
+		package config
+
+		type %s struct {
+	`
 )
 
 func (s *statements) parseStruct(k string, v *baseValue) {
 	fmt.Printf("i be parsing struct: %s, %+v\n", k, *v)
 
+	var s1 = statements{
+		libTypes: s.libTypes,
+	}
+
+	for k1, attr := range v.Attributes {
+		switch *attr.Type {
+		case "object":
+			s1.parseStruct(k+"."+k1, attr)
+
+		default:
+			s1.parseBase(k, k1, attr)
+		}
+	}
+
+	// var (
+	// 	configName = strings.ToLower(k)
+	// 	configType = *v.Type
+	// )
+
+	// Add base struct to outer config variable like you would a regular config
+	s.configFields = append(s.configFields, makeConfigField(k, strings.ToUpper(k[0:1])+k[1:]))
+	// s.configGetters = append(s.configGetters, makeNestedStructConfigGetter(strings.ToUpper(k[0:1])+k[1:], k, configName, configType))
+
+	// Make the typedef header for file
+	var header = fmt.Sprintf(nestedStructTemplate, strings.ToUpper(k[0:1])+k[1:])
+
+	// Take all fields and add them here
+	header += "\n" + strings.Join(s1.configFields, "\n")
+	header += "\n}\n" + strings.Join(s1.configGetters, "\n")
+
+	// Stringify the config write it to a file
+
+	// // fold everything in
+	// s.configFields = append(s.configFields, s1.configFields...)
+	// s.configGetters = append(s.configGetters, s1.configGetters...)
+	s.flagFields = append(s.flagFields, s1.flagFields...)
+	s.flagVars = append(s.flagVars, s1.flagVars...)
+
+	// // Check if they have marked it required
+	// if v.Required {
+	// 	s.requiredIfs = append(s.requiredIfs, makeRequiredIf(configName))
+	// }
+
+	// // Check if we need to make a default assertion
+	// if v.Default != nil {
+	// 	s.defaultIfs = append(s.defaultIfs, makeDefaultIf(configName, configType, v.Default))
+	// }
+
+	// TODO: this is one that needs to change if we are in a struct
+	// Create the mapper from flags to config
+	var mappers = `
+		%s: %s{
+			%s
+		},
+	`
+
+	s.mappers = append(s.mappers, fmt.Sprintf(mappers, k, strings.ToUpper(k[0:1])+k[1:], strings.Join(s1.mappers, "\n")))
+
+	// if v.Validate {
+	// 	s.validators = append(s.validators, makeValidator(k, configName, configType))
+	// 	s.validateCalls = append(s.validateCalls, makeValidateCall(k, configName))
+	// }
+
+	// // If there are defined extra fields then we will add them
+	// if len(allowedExtraFields[configType]) > 0 {
+	// 	s.extraFields = append(s.extraFields, resolveExtraFields(configType, configName, v)...)
+	// }
+
+	var err = ioutil.WriteFile(pwd+"config/"+k+".go", []byte(header), 0666)
+	fmt.Println("err", err)
+	if err != nil {
+		fmt.Println("err:", err.Error())
+		panic("err:" + err.Error())
+		os.Exit(9)
+	}
 	/*
 		flag: needs to be mongo.port, mongo.addr, mongo.etc...
 		config: value needs to be a custom struct
@@ -335,7 +414,7 @@ func (s *statements) parseStruct(k string, v *baseValue) {
 	// s.configFields = append(s.configFields, makeConfigField(configName, configType))
 }
 
-func (s *statements) parseBase(k string, v *baseValue) {
+func (s *statements) parseBase(base, k string, v *baseValue) {
 	// It doesn't make sense to require the value but then also provide a default... whats the point?
 	if v.Default != nil && v.Required {
 		panic(fmt.Errorf("cannot apply a default to a required value - { name: %s, default: %+v }", k, v.Default))
@@ -377,14 +456,23 @@ func (s *statements) parseBase(k string, v *baseValue) {
 	s.configFields = append(s.configFields, makeConfigField(configName, configType))
 
 	// Add config getters
-	s.configGetters = append(s.configGetters, makeConfigGetter(k, configName, configType))
+	if base == "" {
+		s.configGetters = append(s.configGetters, makeConfigGetter(k, configName, configType))
+	} else {
+
+		if len(v.Attributes) > 0 {
+			s.configGetters = append(s.configGetters, makeNestedStructConfigGetter(strings.ToUpper(base[0:1])+base[1:], k, configName, configType))
+		} else {
+			s.configGetters = append(s.configGetters, makeNestedConfigGetter(strings.ToUpper(base[0:1])+base[1:], k, configName, configType))
+		}
+	}
 
 	// Add the flag fields
-	s.flagFields = append(s.flagFields, makeFlagField(configName, configType))
+	s.flagFields = append(s.flagFields, makeFlagField(base, configName, configType))
 
 	// TODO: this is one that needs to change if we are in a struct
 	// Create the flag.Var statements
-	s.flagVars = append(s.flagVars, makeFlagVar(configName, v.Description))
+	s.flagVars = append(s.flagVars, makeFlagVar(base, configName, v.Description))
 
 	// Check if they have marked it required
 	if v.Required {
@@ -398,7 +486,11 @@ func (s *statements) parseBase(k string, v *baseValue) {
 
 	// TODO: this is one that needs to change if we are in a struct
 	// Create the mapper from flags to config
-	s.mappers = append(s.mappers, makeMapper(configName))
+	if base == "" {
+		s.mappers = append(s.mappers, makeMapper(configName))
+	} else {
+		s.mappers = append(s.mappers, makeNestedMapper(configName, base+strings.ToUpper(k[0:1])+k[1:]))
+	}
 
 	if v.Validate {
 		s.validators = append(s.validators, makeValidator(k, configName, configType))

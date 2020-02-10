@@ -7,17 +7,18 @@ package config
 import "flag"
 
 type flags struct {
-	dbPorterino intFlag
-	dbAddr      stringFlag
-	ports       stringArrayFlag
+	port stringFlag
+	// TODO: need to do something here to disambiguate this flag from something actually named that
+	dbPort stringFlag
+	dbAddr stringFlag
 }
 
 func newFlags() *flags {
 	var f flags
 
-	flag.Var(&f.dbPorterino, "db.porterino", "")
+	flag.Var(&f.port, "port", "")
+	flag.Var(&f.dbPort, "db.port", "")
 	flag.Var(&f.dbAddr, "db.addr", "")
-	flag.Var(&f.ports, "ports", "")
 
 	// nested struct fields
 
@@ -34,12 +35,10 @@ func (f *flags) defaults() {
 
 func (f *flags) toConfig() Config {
 	return Config{
-
+		port: f.port.value,
 		db: Db{
-			porterino: f.dbPorterino.value,
-			addr:      f.dbAddr.value,
+			port: f.dbPort.value,
+			addr: f.dbAddr.value,
 		},
-
-		ports: f.ports.value,
 	}
 }
