@@ -334,23 +334,29 @@ func (s *statements) parseStruct(k string, v *baseValue) {
 	}
 
 	for k1, attr := range v.Attributes {
+		if attr.Type == nil {
+			panic("wtf nil type; fix me")
+		}
+
 		switch *attr.Type {
 		case "object":
+			fmt.Println("k1", k1)
 			s1.parseStruct(k+"."+k1, attr)
 
 		default:
+			fmt.Println("k11", k1)
 			s1.parseBase(k, k1, attr)
 		}
 	}
 
-	// var (
-	// 	configName = strings.ToLower(k)
-	// 	configType = *v.Type
-	// )
+	var (
+		configName = strings.ToLower(k)
+		// configType = *v.Type
+	)
 
 	// Add base struct to outer config variable like you would a regular config
 	s.configFields = append(s.configFields, makeConfigField(k, strings.ToUpper(k[0:1])+k[1:]))
-	// s.configGetters = append(s.configGetters, makeNestedStructConfigGetter(strings.ToUpper(k[0:1])+k[1:], k, configName, configType))
+	s.configGetters = append(s.configGetters, makeNestedStructConfigGetter("Config", k, configName, strings.ToUpper(k[0:1])+k[1:]))
 
 	// Make the typedef header for file
 	var header = fmt.Sprintf(nestedStructTemplate, strings.ToUpper(k[0:1])+k[1:])
@@ -385,7 +391,14 @@ func (s *statements) parseStruct(k string, v *baseValue) {
 		},
 	`
 
+	// fmt.Println("wat", strings.ToUpper(k[0:1])+strings.ToLower(k[1:]))
+	// fmt.Println("wat2", k)
+
+	fmt.Println("s1.mappers", s1.mappers)
+
 	s.mappers = append(s.mappers, fmt.Sprintf(mappers, k, strings.ToUpper(k[0:1])+strings.ToLower(k[1:]), strings.Join(s1.mappers, "\n")))
+
+	fmt.Println("s.mappers", s.mappers)
 
 	// if v.Validate {
 	// 	s.validators = append(s.validators, makeValidator(k, configName, configType))
@@ -489,7 +502,7 @@ func (s *statements) parseBase(base, k string, v *baseValue) {
 	if base == "" {
 		s.mappers = append(s.mappers, makeMapper(configName))
 	} else {
-		s.mappers = append(s.mappers, makeNestedMapper(configName, base+strings.ToUpper(k[0:1])+k[1:]))
+		s.mappers = append(s.mappers, makeNestedMapper(configName, base+strings.ToUpper(configName[0:1])+configName[1:]))
 	}
 
 	if v.Validate {
