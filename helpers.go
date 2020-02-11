@@ -20,6 +20,7 @@ var realType = map[string]string{
 	"url":         "url.URL",
 	"any":         "string",
 	"stringArray": "[]string",
+	"urlArray":    "[]url.URL",
 }
 
 func makeConfigField(configName, configType string) string {

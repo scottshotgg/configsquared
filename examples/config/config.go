@@ -18,6 +18,10 @@ var (
 	c Config
 )
 
+func (c *Config) Db() *Db {
+	var c1 = c.db
+	return &c1
+}
 func (c *Config) Ports() []string {
 	return c.ports
 }
